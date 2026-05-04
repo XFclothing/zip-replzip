@@ -16,8 +16,8 @@ export default function CheckoutSuccess() {
     const params = new URLSearchParams(window.location.search);
     const method = params.get("method");
 
-    // PayPal success — order already confirmed in Checkout.tsx before redirect
-    if (method === "paypal") {
+    // Pending / PayPal — order already confirmed before redirect
+    if (method === "paypal" || method === "pending") {
       clearCart();
       setStatus("success");
       return;
