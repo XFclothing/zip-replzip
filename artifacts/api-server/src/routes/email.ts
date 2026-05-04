@@ -140,7 +140,48 @@ router.post("/email/order", async (req, res) => {
   </div>
 </div>`;
 
-    const staffText = `New order!\n\nCustomer: ${customerName} (${customerEmail})\nOrder #${orderId}\nTotal: €${Number(total).toFixed(2)}\nShipping: ${shippingAddress}\n\nItems:\n${itemsList}`;
+    const staffHtml = `
+<div style="background:#0a0a0a;color:#fff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;padding:0;margin:0;">
+  <div style="max-width:520px;margin:0 auto;padding:48px 40px;">
+    <p style="font-size:10px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin:0 0 32px;">XF — New Order</p>
+
+    <h1 style="font-size:22px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#fff;margin:0 0 6px;">New Order Received</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,0.4);margin:0 0 32px;line-height:1.6;">A customer has placed a new order.</p>
+
+    <div style="border:1px solid rgba(255,255,255,0.08);padding:20px 24px;margin-bottom:16px;">
+      <p style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin:0 0 12px;">Customer</p>
+      <p style="font-size:14px;color:#fff;margin:0 0 4px;font-weight:600;">${customerName}</p>
+      <p style="font-size:12px;color:rgba(255,255,255,0.45);margin:0;">${customerEmail}</p>
+    </div>
+
+    <div style="border:1px solid rgba(255,255,255,0.08);padding:20px 24px;margin-bottom:16px;">
+      <p style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin:0 0 14px;">Items</p>
+      <table style="width:100%;border-collapse:collapse;">
+        ${(items || []).map((i: any) => `
+        <tr>
+          <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.75);font-size:13px;">${i.name}</td>
+          <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.35);font-size:12px;text-align:center;">${i.size}</td>
+          <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.35);font-size:12px;text-align:center;">×${i.quantity}</td>
+          <td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#fff;font-size:13px;text-align:right;">€${(i.price * i.quantity).toFixed(2)}</td>
+        </tr>`).join("")}
+      </table>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;">
+        <span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Total</span>
+        <span style="font-size:16px;font-weight:700;color:#fff;">€${Number(total).toFixed(2)}</span>
+      </div>
+    </div>
+
+    <div style="border:1px solid rgba(255,255,255,0.08);padding:20px 24px;margin-bottom:32px;">
+      <p style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin:0 0 8px;">Ship To</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">${shippingAddress}</p>
+    </div>
+
+    <p style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.15);margin:0 0 3px;">Order Ref</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.2);margin:0 0 40px;font-family:monospace;">#${String(orderId).slice(0, 8).toUpperCase()}</p>
+
+    <p style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.12);margin:0;">XF by Xavier &amp; Fynn</p>
+  </div>
+</div>`;
 
     await Promise.all([
       transport.sendMail({
@@ -154,7 +195,7 @@ router.post("/email/order", async (req, res) => {
           from: FROM,
           to: email,
           subject: `New Order — ${customerName}`,
-          text: staffText,
+          html: staffHtml,
         })
       ),
     ]);
