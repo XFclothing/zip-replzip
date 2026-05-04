@@ -83,16 +83,30 @@ export function SupportWidget() {
     setCreating(true);
     setCreateError(null);
 
-    // Ensure the profile row exists before inserting the ticket (FK: tickets.user_id → profiles.id)
-    await supabase.from("profiles").upsert(
-      {
-        id: user!.id,
-        email: user!.email || "",
-        name: user!.user_metadata?.name || user!.email?.split("@")[0] || "",
-        shipping_address: null,
-      },
-      { onConflict: "id", ignoreDuplicates: true }
-    );
+    // Ensure profile exists before ticket insert (FK: tickets.user_id → profiles.id)
+    // Step 1: Check if profile already exists for this user
+    const { data: existingProfile } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("id", user!.id)
+      .maybeSingle();
+
+    // Step 2: If not found, insert a minimal profile (no email to avoid unique constraint issues)
+    if (!existingProfile) {
+      const { error: profileErr } = await supabase
+        .from("profiles")
+        .insert({
+          id: user!.id,
+          name: user!.user_metadata?.name || user!.email?.split("@")[0] || "",
+        });
+      if (profileErr) {
+        // Last resort: try upsert without email
+        await supabase.from("profiles").upsert(
+          { id: user!.id, name: user!.user_metadata?.name || user!.email?.split("@")[0] || "" },
+          { onConflict: "id" }
+        );
+      }
+    }
 
     const { data: ticketData, error } = await supabase.from("tickets").insert({
       user_id: user!.id,
