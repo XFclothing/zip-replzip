@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "V--bkKUQ8Kxn4JlIbly2w"
+uri = "file://artifacts/xf-store/public/images/product-hoodie-white.png"
+type = "image"
+title = "white hoodie product"
+
+[[generated]]
+id = "1FL-nCvquYPowBffCAsx6"
+uri = "file://artifacts/xf-store/public/images/product-tee-grey.png"
+type = "image"
+title = "grey tee product"
+
+[[generated]]
+id = "jlfyT9vd1m_GE2P48fFeB"
+uri = "file://artifacts/xf-store/public/images/product-jogger-white.png"
+type = "image"
+title = "white jogger product"
