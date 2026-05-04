@@ -151,12 +151,15 @@ export default function Checkout() {
     if (data.order) {
       const customerEmail = profile?.email || user!.email || "";
       const customerName = profile?.name || "";
+      const { data: workers } = await supabase.from("admins").select("email");
+      const workerEmails = (workers || []).map((w: any) => w.email).filter(Boolean);
       apiPost("/email/order", {
         customerEmail,
         customerName,
         orderId: data.order.id,
         total: finalTotal,
         shippingAddress: finalAddress,
+        workerEmails,
         items: items.map((i) => ({
           name: i.name,
           price: i.price,
