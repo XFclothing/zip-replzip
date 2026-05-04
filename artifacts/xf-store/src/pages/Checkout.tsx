@@ -32,7 +32,11 @@ export default function Checkout() {
 
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | "new">("new");
-  const [customAddress, setCustomAddress] = useState("");
+  const [addrStreet, setAddrStreet] = useState("");
+  const [addrNo, setAddrNo] = useState("");
+  const [addrZip, setAddrZip] = useState("");
+  const [addrCity, setAddrCity] = useState("");
+  const [addrCountry, setAddrCountry] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,9 +79,18 @@ export default function Checkout() {
     );
   }
 
+  const customAddress = [
+    `${addrStreet.trim()}${addrNo.trim() ? " " + addrNo.trim() : ""}`,
+    addrZip.trim(),
+    addrCity.trim(),
+    addrCountry.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
   const finalAddress =
     selectedAddressId === "new"
-      ? customAddress.trim()
+      ? customAddress
       : savedAddresses.find((a) => a.id === selectedAddressId)?.address || "";
 
   const discount = appliedCoupon ? totalPrice * (appliedCoupon.discountPercent / 100) : 0;
@@ -111,11 +124,11 @@ export default function Checkout() {
     setSubmitting(true);
     setError(null);
 
-    if (selectedAddressId === "new" && customAddress.trim()) {
+    if (selectedAddressId === "new" && customAddress) {
       await supabase.from("shipping_addresses").insert({
         user_id: user!.id,
         label: null,
-        address: customAddress.trim(),
+        address: customAddress,
         is_default: savedAddresses.length === 0,
       });
     }
@@ -291,13 +304,62 @@ export default function Checkout() {
               )}
 
               {selectedAddressId === "new" && (
-                <textarea
-                  value={customAddress}
-                  onChange={(e) => setCustomAddress(e.target.value)}
-                  placeholder="Street address, City, ZIP Code, Country"
-                  rows={3}
-                  className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors resize-none"
-                />
+                <div className="space-y-3">
+                  <div className="grid grid-cols-[1fr_auto] gap-3">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Street</label>
+                      <input
+                        type="text"
+                        value={addrStreet}
+                        onChange={(e) => setAddrStreet(e.target.value)}
+                        placeholder="123 Main St"
+                        className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">No.</label>
+                      <input
+                        type="text"
+                        value={addrNo}
+                        onChange={(e) => setAddrNo(e.target.value)}
+                        placeholder="12"
+                        className="w-20 bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-[auto_1fr] gap-3">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">ZIP</label>
+                      <input
+                        type="text"
+                        value={addrZip}
+                        onChange={(e) => setAddrZip(e.target.value)}
+                        placeholder="10115"
+                        className="w-28 bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">City</label>
+                      <input
+                        type="text"
+                        value={addrCity}
+                        onChange={(e) => setAddrCity(e.target.value)}
+                        placeholder="Berlin"
+                        className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Country</label>
+                    <input
+                      type="text"
+                      value={addrCountry}
+                      onChange={(e) => setAddrCountry(e.target.value)}
+                      placeholder="Germany"
+                      className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
+                    />
+                  </div>
+                </div>
               )}
             </div>
 
