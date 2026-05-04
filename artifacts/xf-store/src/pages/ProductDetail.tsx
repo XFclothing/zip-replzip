@@ -7,6 +7,7 @@ import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLang } from "@/context/LanguageContext";
+import xfLogoWhite from "@assets/ChatGPT_Image_3._Mai_2026,_19_49_35_1777830790029.png";
 
 type ColorVariant = {
   name: string;
@@ -155,6 +156,19 @@ export default function ProductDetail() {
                           src={img}
                           alt={`${cartName} view ${idx + 1}`}
                           className="w-full h-full object-cover absolute inset-0"
+                        />
+                        <img
+                          src={xfLogoWhite}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute pointer-events-none"
+                          style={{
+                            width: "18%",
+                            top: "28%",
+                            left: "32%",
+                            mixBlendMode: "screen",
+                            opacity: 0.55,
+                          }}
                         />
                       </div>
                     ))}

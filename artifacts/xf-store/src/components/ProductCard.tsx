@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import xfLogoWhite from "@assets/ChatGPT_Image_3._Mai_2026,_19_49_35_1777830790029.png";
 
 interface Color {
   name: string;
@@ -41,6 +42,19 @@ export function ProductCard({ product, index }: ProductCardProps) {
           src={displayImage}
           alt={product.name}
           className="object-cover w-full h-full transition-all duration-500 ease-out group-hover:scale-105"
+        />
+        <img
+          src={xfLogoWhite}
+          alt=""
+          aria-hidden="true"
+          className="absolute pointer-events-none"
+          style={{
+            width: "20%",
+            top: "28%",
+            left: "32%",
+            mixBlendMode: "screen",
+            opacity: 0.5,
+          }}
         />
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </Link>
