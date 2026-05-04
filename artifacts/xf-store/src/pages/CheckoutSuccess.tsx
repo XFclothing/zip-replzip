@@ -14,6 +14,16 @@ export default function CheckoutSuccess() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const method = params.get("method");
+
+    // PayPal success — order already confirmed in Checkout.tsx before redirect
+    if (method === "paypal") {
+      clearCart();
+      setStatus("success");
+      return;
+    }
+
+    // Stripe Checkout Session flow
     const sessionId = params.get("session_id");
 
     if (!sessionId) {

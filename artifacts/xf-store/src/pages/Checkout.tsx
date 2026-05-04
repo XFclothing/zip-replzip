@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { Check, CreditCard, Loader2 } from "lucide-react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/lib/supabase";
@@ -13,7 +14,10 @@ type ShippingAddress = {
   is_default: boolean;
 };
 
+type PaymentMethod = "stripe" | "paypal";
+
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || "";
 
 async function apiPost(path: string, body: unknown) {
   const res = await fetch(`${BASE}/api${path}`, {
@@ -27,14 +31,16 @@ async function apiPost(path: string, body: unknown) {
 
 export default function Checkout() {
   const { user, profile } = useAuth();
-  const { items, totalPrice } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const [, navigate] = useLocation();
 
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | "new">("new");
   const [customAddress, setCustomAddress] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [addressReady, setAddressReady] = useState(false);
 
   if (!user) {
     navigate("/login?redirect=/checkout");
@@ -74,14 +80,7 @@ export default function Checkout() {
       ? customAddress.trim()
       : savedAddresses.find((a) => a.id === selectedAddressId)?.address || "";
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!finalAddress) { setError("Please enter or select a shipping address."); return; }
-
-    setSubmitting(true);
-    setError(null);
-
-    // Save new address to account if typed manually
+  async function ensureAddressSaved() {
     if (selectedAddressId === "new" && customAddress.trim()) {
       await supabase.from("shipping_addresses").insert({
         user_id: user!.id,
@@ -90,6 +89,16 @@ export default function Checkout() {
         is_default: savedAddresses.length === 0,
       });
     }
+  }
+
+  async function handleStripeSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!finalAddress) { setError("Please enter or select a shipping address."); return; }
+
+    setSubmitting(true);
+    setError(null);
+
+    await ensureAddressSaved();
 
     const data = await apiPost("/stripe/checkout", {
       items: items.map((i) => ({
@@ -112,6 +121,47 @@ export default function Checkout() {
       setSubmitting(false);
     }
   }
+
+  const createPayPalOrder = useCallback(async () => {
+    if (!finalAddress) throw new Error("Please enter or select a shipping address.");
+    await ensureAddressSaved();
+
+    const data = await apiPost("/paypal/create-order", {
+      items: items.map((i) => ({
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+        size: i.size,
+      })),
+      shippingAddress: finalAddress,
+      email: profile?.email || user!.email || "",
+      customerName: profile?.name || "",
+      userId: user!.id,
+    });
+
+    if (!data.id) throw new Error(data.error || "Failed to create PayPal order.");
+    return data.id;
+  }, [finalAddress, items, profile, user]);
+
+  const onPayPalApprove = useCallback(async (data: { orderID: string }) => {
+    setSubmitting(true);
+    setError(null);
+
+    const result = await apiPost("/paypal/capture-order", { orderId: data.orderID });
+
+    if (result.order) {
+      clearCart();
+      navigate("/checkout-success?method=paypal");
+    } else {
+      setError(result.error || "Payment could not be confirmed. Please contact support.");
+      setSubmitting(false);
+    }
+  }, [navigate, clearCart]);
+
+  const paymentBadges = [
+    { key: "stripe", label: "Card / Klarna", icon: <CreditCard className="w-4 h-4 text-foreground/60" /> },
+    { key: "paypal", label: "PayPal", icon: <span className="text-xs font-bold text-[#003087]">Pay<span className="text-[#009CDE]">Pal</span></span> },
+  ];
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-24">
@@ -145,125 +195,170 @@ export default function Checkout() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-
-              {/* Customer Info */}
-              <div className="border border-foreground/8 p-6">
-                <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Customer Info</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Name</label>
-                    <div className="bg-foreground/5 border border-foreground/8 px-4 py-3 text-sm text-foreground/60">{profile?.name}</div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Email</label>
-                    <div className="bg-foreground/5 border border-foreground/8 px-4 py-3 text-sm text-foreground/60 truncate">{profile?.email}</div>
-                  </div>
+            {/* Customer Info */}
+            <div className="border border-foreground/8 p-6">
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Customer Info</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Name</label>
+                  <div className="bg-foreground/5 border border-foreground/8 px-4 py-3 text-sm text-foreground/60">{profile?.name}</div>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Email</label>
+                  <div className="bg-foreground/5 border border-foreground/8 px-4 py-3 text-sm text-foreground/60 truncate">{profile?.email}</div>
                 </div>
               </div>
+            </div>
 
-              {/* Shipping Address */}
-              <div className="border border-foreground/8 p-6">
-                <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Shipping Address</h2>
+            {/* Shipping Address */}
+            <div className="border border-foreground/8 p-6">
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Shipping Address</h2>
 
-                {savedAddresses.length > 0 && (
-                  <div className="space-y-2 mb-5">
-                    {savedAddresses.map((addr) => (
-                      <button
-                        key={addr.id}
-                        type="button"
-                        onClick={() => setSelectedAddressId(addr.id)}
-                        className={`w-full text-left p-4 border transition-colors flex items-start gap-3 ${
-                          selectedAddressId === addr.id
-                            ? "border-foreground/40 bg-foreground/5"
-                            : "border-foreground/10 hover:border-foreground/25"
-                        }`}
-                      >
-                        <div className={`w-4 h-4 rounded-full border flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
-                          selectedAddressId === addr.id ? "border-white bg-foreground" : "border-foreground/30"
-                        }`}>
-                          {selectedAddressId === addr.id && <Check className="w-2.5 h-2.5 text-background" strokeWidth={3} />}
-                        </div>
-                        <div>
-                          {addr.label && (
-                            <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50 mb-1">{addr.label}</p>
-                          )}
-                          <p className="text-sm text-foreground/75 leading-relaxed">{addr.address}</p>
-                        </div>
-                      </button>
-                    ))}
-
+              {savedAddresses.length > 0 && (
+                <div className="space-y-2 mb-5">
+                  {savedAddresses.map((addr) => (
                     <button
+                      key={addr.id}
                       type="button"
-                      onClick={() => setSelectedAddressId("new")}
-                      className={`w-full text-left p-4 border transition-colors flex items-center gap-3 ${
-                        selectedAddressId === "new"
+                      onClick={() => setSelectedAddressId(addr.id)}
+                      className={`w-full text-left p-4 border transition-colors flex items-start gap-3 ${
+                        selectedAddressId === addr.id
                           ? "border-foreground/40 bg-foreground/5"
                           : "border-foreground/10 hover:border-foreground/25"
                       }`}
                     >
-                      <div className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
-                        selectedAddressId === "new" ? "border-white bg-foreground" : "border-foreground/30"
+                      <div className={`w-4 h-4 rounded-full border flex-shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
+                        selectedAddressId === addr.id ? "border-white bg-foreground" : "border-foreground/30"
                       }`}>
-                        {selectedAddressId === "new" && <Check className="w-2.5 h-2.5 text-background" strokeWidth={3} />}
+                        {selectedAddressId === addr.id && <Check className="w-2.5 h-2.5 text-background" strokeWidth={3} />}
                       </div>
-                      <span className="text-xs uppercase tracking-[0.35em] text-foreground/50">Use a different address</span>
+                      <div>
+                        {addr.label && (
+                          <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50 mb-1">{addr.label}</p>
+                        )}
+                        <p className="text-sm text-foreground/75 leading-relaxed">{addr.address}</p>
+                      </div>
                     </button>
-                  </div>
-                )}
+                  ))}
 
-                {selectedAddressId === "new" && (
-                  <textarea
-                    value={customAddress}
-                    onChange={(e) => setCustomAddress(e.target.value)}
-                    placeholder="Street address, City, ZIP Code, Country"
-                    rows={3}
-                    required
-                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors resize-none"
-                  />
-                )}
-              </div>
-
-              {/* Payment Methods */}
-              <div className="border border-foreground/8 p-6">
-                <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Payment</h2>
-                <div className="flex flex-wrap gap-3 items-center">
-                  <div className="flex items-center gap-2 bg-foreground/5 border border-foreground/10 px-3 py-2">
-                    <CreditCard className="w-4 h-4 text-foreground/60" />
-                    <span className="text-xs text-foreground/60 uppercase tracking-wider">Card</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-foreground/5 border border-foreground/10 px-3 py-2">
-                    <span className="text-xs font-bold text-[#FFB3C7]">K</span>
-                    <span className="text-xs text-foreground/60 uppercase tracking-wider">Klarna</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-foreground/5 border border-foreground/10 px-3 py-2">
-                    <span className="text-xs font-bold text-[#009CDE]">P</span>
-                    <span className="text-xs text-foreground/60 uppercase tracking-wider">PayPal</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-foreground/5 border border-foreground/10 px-3 py-2">
-                    <span className="text-xs text-foreground/60 uppercase tracking-wider"> Pay</span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedAddressId("new")}
+                    className={`w-full text-left p-4 border transition-colors flex items-center gap-3 ${
+                      selectedAddressId === "new"
+                        ? "border-foreground/40 bg-foreground/5"
+                        : "border-foreground/10 hover:border-foreground/25"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
+                      selectedAddressId === "new" ? "border-white bg-foreground" : "border-foreground/30"
+                    }`}>
+                      {selectedAddressId === "new" && <Check className="w-2.5 h-2.5 text-background" strokeWidth={3} />}
+                    </div>
+                    <span className="text-xs uppercase tracking-[0.35em] text-foreground/50">Use a different address</span>
+                  </button>
                 </div>
-                <p className="text-[10px] text-foreground/25 mt-3 tracking-wider">You will be redirected to Stripe's secure checkout to complete payment.</p>
+              )}
+
+              {selectedAddressId === "new" && (
+                <textarea
+                  value={customAddress}
+                  onChange={(e) => setCustomAddress(e.target.value)}
+                  placeholder="Street address, City, ZIP Code, Country"
+                  rows={3}
+                  className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors resize-none"
+                />
+              )}
+            </div>
+
+            {/* Payment Method Selection */}
+            <div className="border border-foreground/8 p-6">
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-5">Payment Method</h2>
+
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {paymentBadges.map((method) => (
+                  <button
+                    key={method.key}
+                    type="button"
+                    onClick={() => setPaymentMethod(method.key as PaymentMethod)}
+                    className={`flex items-center gap-3 p-4 border transition-colors ${
+                      paymentMethod === method.key
+                        ? "border-foreground/40 bg-foreground/5"
+                        : "border-foreground/10 hover:border-foreground/25"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
+                      paymentMethod === method.key ? "border-white bg-foreground" : "border-foreground/30"
+                    }`}>
+                      {paymentMethod === method.key && <Check className="w-2.5 h-2.5 text-background" strokeWidth={3} />}
+                    </div>
+                    {method.icon}
+                    <span className="text-xs text-foreground/70 uppercase tracking-wider">{method.label}</span>
+                  </button>
+                ))}
               </div>
 
-              {error && <p className="text-red-400/80 text-xs tracking-wide">{error}</p>}
+              {error && <p className="text-red-400/80 text-xs tracking-wide mb-4">{error}</p>}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Redirecting to Stripe...
-                  </>
-                ) : (
-                  `Pay · €${totalPrice.toFixed(2)}`
-                )}
-              </button>
-            </form>
+              {/* Stripe Button */}
+              {paymentMethod === "stripe" && (
+                <form onSubmit={handleStripeSubmit}>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Redirecting...
+                      </>
+                    ) : (
+                      `Pay with Card · €${totalPrice.toFixed(2)}`
+                    )}
+                  </button>
+                  <p className="text-[10px] text-foreground/25 mt-3 tracking-wider text-center">
+                    Secured by Stripe · Card, Klarna & more
+                  </p>
+                </form>
+              )}
+
+              {/* PayPal Buttons */}
+              {paymentMethod === "paypal" && (
+                <div>
+                  {!finalAddress ? (
+                    <p className="text-[10px] text-foreground/40 uppercase tracking-wider text-center py-3">
+                      Please enter a shipping address above to continue.
+                    </p>
+                  ) : PAYPAL_CLIENT_ID ? (
+                    <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID, currency: "EUR" }}>
+                      <PayPalButtons
+                        style={{ layout: "vertical", shape: "rect", label: "pay" }}
+                        createOrder={createPayPalOrder}
+                        onApprove={onPayPalApprove}
+                        onError={(err) => {
+                          console.error("PayPal error:", err);
+                          setError("PayPal encountered an error. Please try again.");
+                        }}
+                        onCancel={() => setError(null)}
+                        disabled={submitting}
+                      />
+                    </PayPalScriptProvider>
+                  ) : (
+                    <p className="text-[10px] text-foreground/40 uppercase tracking-wider text-center py-3">
+                      PayPal is not configured yet.
+                    </p>
+                  )}
+                  {submitting && (
+                    <div className="flex items-center justify-center gap-2 mt-3">
+                      <Loader2 className="w-4 h-4 animate-spin text-foreground/40" />
+                      <span className="text-xs text-foreground/40 uppercase tracking-wider">Confirming payment...</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
           </div>
         </motion.div>
       </div>

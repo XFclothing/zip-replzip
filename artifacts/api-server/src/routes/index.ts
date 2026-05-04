@@ -5,6 +5,7 @@ import ordersRouter from "./orders";
 import adminRouter from "./admin";
 import emailRouter from "./email";
 import stripeRouter from "./stripe";
+import paypalRouter from "./paypal";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(ordersRouter);
 router.use(adminRouter);
 router.use(emailRouter);
 router.use(stripeRouter);
+router.use(paypalRouter);
 
 export default router;
