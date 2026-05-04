@@ -52,9 +52,9 @@ export default function Worker() {
   async function fetchOrders() {
     const { data, error } = await supabase
       .from("orders")
-      .select("*, order_items(*), profiles!orders_user_id_fkey(name, email)")
+      .select("*, order_items(*)")
       .order("created_at", { ascending: false });
-    if (error) console.error("Orders fetch error:", error.message, error.details, error.hint);
+    if (error) console.error("Orders fetch error:", error.message);
     setOrders((data as Order[]) || []);
     setOrdersLoading(false);
   }
@@ -62,7 +62,7 @@ export default function Worker() {
   async function fetchTickets() {
     const { data } = await supabase
       .from("tickets")
-      .select("*, profiles(name, email)")
+      .select("*")
       .order("created_at", { ascending: false });
     setTickets((data as Ticket[]) || []);
     setTicketsLoading(false);

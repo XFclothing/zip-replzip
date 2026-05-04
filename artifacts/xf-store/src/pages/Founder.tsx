@@ -73,10 +73,9 @@ export default function Founder() {
   async function fetchOrders() {
     const { data, error } = await supabase
       .from("orders")
-      .select("*, order_items(*), profiles(name, email)")
+      .select("*, order_items(*)")
       .order("created_at", { ascending: false });
-    if (error) console.error("[Founder] fetchOrders RLS error:", error.message, error.hint);
-    console.log("[Founder] orders fetched:", data?.length ?? 0);
+    if (error) console.error("[Founder] fetchOrders error:", error.message);
     setOrders((data as Order[]) || []);
     setOrdersLoading(false);
   }
@@ -84,7 +83,7 @@ export default function Founder() {
   async function fetchTickets() {
     const { data } = await supabase
       .from("tickets")
-      .select("*, profiles(name, email)")
+      .select("*")
       .order("created_at", { ascending: false });
     setTickets((data as Ticket[]) || []);
     setTicketsLoading(false);
