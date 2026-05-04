@@ -21,7 +21,7 @@ const STATUS_COLORS: Record<string, string> = {
   shipped: "text-purple-400/80",
   delivered: "text-teal-400/80",
   completed: "text-teal-400/80",
-  old_orders: "text-white/30",
+  old_orders: "text-foreground/30",
   cancelled: "text-red-400/70",
 };
 
@@ -337,48 +337,48 @@ export default function Account() {
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="w-5 h-5 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-black pt-28 pb-24">
+    <div className="min-h-screen bg-background pt-28 pb-24">
       <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-2">Account</p>
-          <h1 className="text-4xl font-bold uppercase tracking-widest text-white mb-12">
+          <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-2">Account</p>
+          <h1 className="text-4xl font-bold uppercase tracking-widest text-foreground mb-12">
             {profile?.name || t.account.title}
           </h1>
 
           <div className="grid gap-12">
 
             {/* Profile */}
-            <section className="border border-white/8 p-8">
-              <h2 className="text-xs uppercase tracking-[0.4em] text-white/40 mb-6">{t.account.profile}</h2>
+            <section className="border border-foreground/8 p-8">
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-6">{t.account.profile}</h2>
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <span className="text-white/30 text-sm w-20">{t.account.name}</span>
-                  <span className="text-white text-sm">{profile?.name}</span>
+                  <span className="text-foreground/30 text-sm w-20">{t.account.name}</span>
+                  <span className="text-foreground text-sm">{profile?.name}</span>
                 </div>
                 <div className="flex gap-4">
-                  <span className="text-white/30 text-sm w-20">{t.account.email}</span>
-                  <span className="text-white text-sm">{profile?.email}</span>
+                  <span className="text-foreground/30 text-sm w-20">{t.account.email}</span>
+                  <span className="text-foreground text-sm">{profile?.email}</span>
                 </div>
               </div>
             </section>
 
             {/* Security / 2FA */}
-            <section className="border border-white/8 p-8">
-              <h2 className="text-xs uppercase tracking-[0.4em] text-white/40 mb-6">{t.account.security}</h2>
+            <section className="border border-foreground/8 p-8">
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-6">{t.account.security}</h2>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {mfaEnabled
                     ? <ShieldCheck className="w-4 h-4 text-green-400/70" />
-                    : <ShieldOff className="w-4 h-4 text-white/20" />}
+                    : <ShieldOff className="w-4 h-4 text-foreground/20" />}
                   <div>
-                    <p className="text-sm text-white">{t.account.twoFA}</p>
-                    <p className="text-[11px] text-white/30 mt-0.5">
+                    <p className="text-sm text-foreground">{t.account.twoFA}</p>
+                    <p className="text-[11px] text-foreground/30 mt-0.5">
                       {mfaEnabled
                         ? mfaMethod === "email" ? t.account.twoFAEnabledEmail : t.account.twoFAEnabledApp
                         : t.account.twoFADisabled}
@@ -396,7 +396,7 @@ export default function Account() {
                   <button
                     onClick={openEnable2FA}
                     disabled={mfaLoading}
-                    className="text-[10px] uppercase tracking-[0.35em] text-white/40 hover:text-white transition-colors border border-white/15 hover:border-white/40 px-3 py-2 disabled:opacity-40"
+                    className="text-[10px] uppercase tracking-[0.35em] text-foreground/40 hover:text-foreground transition-colors border border-foreground/15 hover:border-foreground/40 px-3 py-2 disabled:opacity-40"
                   >
                     {mfaLoading ? t.account.checking : t.account.enable2FA}
                   </button>
@@ -410,10 +410,10 @@ export default function Account() {
             {/* Shipping Addresses */}
             <section>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xs uppercase tracking-[0.4em] text-white/40">{t.account.shippingAddresses}</h2>
+                <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40">{t.account.shippingAddresses}</h2>
                 <button
                   onClick={() => { setShowAddForm(true); setAddError(null); }}
-                  className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-white/40 hover:text-white transition-colors border border-white/15 hover:border-white/40 px-3 py-2"
+                  className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-foreground/40 hover:text-foreground transition-colors border border-foreground/15 hover:border-foreground/40 px-3 py-2"
                 >
                   <Plus className="w-3 h-3" />
                   {t.account.addAddress}
@@ -422,48 +422,48 @@ export default function Account() {
 
               {addressesLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
                 </div>
               ) : addresses.length === 0 ? (
-                <div className="border border-white/6 p-8 text-center">
-                  <p className="text-white/25 text-xs uppercase tracking-[0.4em]">{t.account.noAddresses}</p>
+                <div className="border border-foreground/6 p-8 text-center">
+                  <p className="text-foreground/25 text-xs uppercase tracking-[0.4em]">{t.account.noAddresses}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {addresses.map((addr) => (
                     <div
                       key={addr.id}
-                      className={`border p-5 transition-colors ${addr.is_default ? "border-white/25 bg-white/3" : "border-white/8"}`}
+                      className={`border p-5 transition-colors ${addr.is_default ? "border-foreground/25 bg-foreground/3" : "border-foreground/8"}`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             {addr.label && (
-                              <span className="text-[10px] uppercase tracking-[0.4em] text-white/50 font-medium">
+                              <span className="text-[10px] uppercase tracking-[0.4em] text-foreground/50 font-medium">
                                 {addr.label}
                               </span>
                             )}
                             {addr.is_default && (
-                              <span className="text-[9px] uppercase tracking-widest text-white/30 border border-white/15 px-1.5 py-0.5">
+                              <span className="text-[9px] uppercase tracking-widest text-foreground/30 border border-foreground/15 px-1.5 py-0.5">
                                 {t.account.default}
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-white/75 leading-relaxed">{addr.address}</p>
+                          <p className="text-sm text-foreground/75 leading-relaxed">{addr.address}</p>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {!addr.is_default && (
                             <button
                               onClick={() => setDefault(addr.id)}
                               title={t.account.setDefault}
-                              className="text-white/20 hover:text-white/60 transition-colors"
+                              className="text-foreground/20 hover:text-foreground/60 transition-colors"
                             >
                               <Star className="w-3.5 h-3.5" />
                             </button>
                           )}
                           <button
                             onClick={() => deleteAddress(addr.id)}
-                            className="text-white/20 hover:text-red-400/70 transition-colors"
+                            className="text-foreground/20 hover:text-red-400/70 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -477,37 +477,37 @@ export default function Account() {
 
             {/* Order History */}
             <section>
-              <h2 className="text-xs uppercase tracking-[0.4em] text-white/40 mb-6">{t.account.orderHistory}</h2>
+              <h2 className="text-xs uppercase tracking-[0.4em] text-foreground/40 mb-6">{t.account.orderHistory}</h2>
               {ordersLoading ? (
                 <div className="flex justify-center py-12">
-                  <div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
                 </div>
               ) : orders.length === 0 ? (
-                <p className="text-white/25 text-xs uppercase tracking-widest py-8">{t.account.noOrders}</p>
+                <p className="text-foreground/25 text-xs uppercase tracking-widest py-8">{t.account.noOrders}</p>
               ) : (
                 <div className="space-y-3">
                   {orders.map((order) => (
                     <button
                       key={order.id}
                       onClick={() => setActiveOrder(order)}
-                      className="w-full border border-white/8 p-5 text-left hover:border-white/20 transition-colors group"
+                      className="w-full border border-foreground/8 p-5 text-left hover:border-foreground/20 transition-colors group"
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-[10px] text-white/30 uppercase tracking-widest">
+                          <p className="text-[10px] text-foreground/30 uppercase tracking-widest">
                             {new Date(order.created_at).toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" })}
                           </p>
-                          <p className="text-white font-semibold mt-1">€{order.total_price.toFixed(2)}</p>
+                          <p className="text-foreground font-semibold mt-1">€{order.total_price.toFixed(2)}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className={`text-xs uppercase tracking-widest font-medium ${STATUS_COLORS[order.status] || "text-white/50"}`}>
+                          <span className={`text-xs uppercase tracking-widest font-medium ${STATUS_COLORS[order.status] || "text-foreground/50"}`}>
                             {STATUS_LABEL[order.status] || order.status}
                           </span>
-                          <span className="text-white/15 group-hover:text-white/40 transition-colors text-xs">›</span>
+                          <span className="text-foreground/15 group-hover:text-foreground/40 transition-colors text-xs">›</span>
                         </div>
                       </div>
                       {order.order_items && order.order_items.length > 0 && (
-                        <p className="text-xs text-white/25 mt-2">
+                        <p className="text-xs text-foreground/25 mt-2">
                           {order.order_items.map(i => i.name).join(", ")}
                         </p>
                       )}
@@ -520,7 +520,7 @@ export default function Account() {
 
           <button
             onClick={handleSignOut}
-            className="mt-12 text-xs uppercase tracking-[0.4em] text-white/25 hover:text-white/60 transition-colors border-b border-white/10 pb-0.5"
+            className="mt-12 text-xs uppercase tracking-[0.4em] text-foreground/25 hover:text-foreground/60 transition-colors border-b border-foreground/10 pb-0.5"
           >
             {t.account.signOut}
           </button>
@@ -538,30 +538,30 @@ export default function Account() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-md bg-[#0a0a0a] border border-white/10"
+                className="w-full max-w-md bg-card border border-foreground/10"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-sm font-semibold text-white uppercase tracking-widest">{t.account.choose2FAMethod}</h3>
-                    <button onClick={() => setShow2FAMethodSelect(false)} className="text-white/30 hover:text-white">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{t.account.choose2FAMethod}</h3>
+                    <button onClick={() => setShow2FAMethodSelect(false)} className="text-foreground/30 hover:text-foreground">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <p className="text-xs text-white/40 mb-6 leading-relaxed">{t.account.choose2FAMethodDesc}</p>
+                  <p className="text-xs text-foreground/40 mb-6 leading-relaxed">{t.account.choose2FAMethodDesc}</p>
                   <div className="space-y-3">
                     <button
                       onClick={startEnable2FATotp}
-                      className="w-full text-left border border-white/10 hover:border-white/30 p-5 transition-colors group"
+                      className="w-full text-left border border-foreground/10 hover:border-foreground/30 p-5 transition-colors group"
                     >
-                      <p className="text-sm text-white font-medium mb-1 group-hover:text-white">{t.account.twoFAMethodApp}</p>
-                      <p className="text-xs text-white/35">{t.account.twoFAMethodAppDesc}</p>
+                      <p className="text-sm text-foreground font-medium mb-1 group-hover:text-foreground">{t.account.twoFAMethodApp}</p>
+                      <p className="text-xs text-foreground/35">{t.account.twoFAMethodAppDesc}</p>
                     </button>
                     <button
                       onClick={enableEmailMfa}
-                      className="w-full text-left border border-white/10 hover:border-white/30 p-5 transition-colors group"
+                      className="w-full text-left border border-foreground/10 hover:border-foreground/30 p-5 transition-colors group"
                     >
-                      <p className="text-sm text-white font-medium mb-1 group-hover:text-white">{t.account.twoFAMethodEmail}</p>
-                      <p className="text-xs text-white/35">{t.account.twoFAMethodEmailDesc}</p>
+                      <p className="text-sm text-foreground font-medium mb-1 group-hover:text-foreground">{t.account.twoFAMethodEmail}</p>
+                      <p className="text-xs text-foreground/35">{t.account.twoFAMethodEmailDesc}</p>
                     </button>
                   </div>
                 </div>
@@ -582,27 +582,27 @@ export default function Account() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-md bg-[#0a0a0a] border border-white/10 overflow-y-auto max-h-[90vh]"
+                className="w-full max-w-md bg-card border border-foreground/10 overflow-y-auto max-h-[90vh]"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-sm font-semibold text-white uppercase tracking-widest">{t.account.setup2FA}</h3>
-                    <button onClick={() => { setShow2FASetup(false); setQrCode(null); setTotpSecret(null); setEnrollFactorId(null); setMfaError(null); }} className="text-white/30 hover:text-white">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{t.account.setup2FA}</h3>
+                    <button onClick={() => { setShow2FASetup(false); setQrCode(null); setTotpSecret(null); setEnrollFactorId(null); setMfaError(null); }} className="text-foreground/30 hover:text-foreground">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <p className="text-xs text-white/40 mb-5 leading-relaxed">{t.account.setup2FADesc}</p>
+                  <p className="text-xs text-foreground/40 mb-5 leading-relaxed">{t.account.setup2FADesc}</p>
                   {qrCode && (
                     <div className="flex justify-center mb-5">
-                      <div className="bg-white p-3 inline-block">
+                      <div className="bg-foreground p-3 inline-block">
                         <img src={qrCode} alt="2FA QR Code" className="w-40 h-40 block" />
                       </div>
                     </div>
                   )}
                   {totpSecret && (
-                    <div className="mb-5 bg-white/5 border border-white/10 px-4 py-3 text-center">
-                      <p className="text-[10px] uppercase tracking-[0.35em] text-white/30 mb-1">{t.account.manualKey}</p>
-                      <p className="text-xs text-white/60 font-mono break-all">{totpSecret}</p>
+                    <div className="mb-5 bg-foreground/5 border border-foreground/10 px-4 py-3 text-center">
+                      <p className="text-[10px] uppercase tracking-[0.35em] text-foreground/30 mb-1">{t.account.manualKey}</p>
+                      <p className="text-xs text-foreground/60 font-mono break-all">{totpSecret}</p>
                     </div>
                   )}
                   <input
@@ -612,13 +612,13 @@ export default function Account() {
                     value={verifyCode}
                     onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ""))}
                     placeholder="000000"
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-white/30 transition-colors mb-4"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-foreground/30 transition-colors mb-4"
                   />
                   {mfaError && <p className="text-red-400/80 text-xs mb-3">{mfaError}</p>}
                   <button
                     onClick={confirmEnable2FA}
                     disabled={mfaLoading || verifyCode.length !== 6}
-                    className="w-full bg-white text-black py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                    className="w-full bg-foreground text-background py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
                   >
                     {mfaLoading ? t.account.checking : t.account.confirmEnable}
                   </button>
@@ -640,16 +640,16 @@ export default function Account() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-md bg-[#0a0a0a] border border-white/10"
+                className="w-full max-w-md bg-card border border-foreground/10"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-sm font-semibold text-white uppercase tracking-widest">{t.account.disable2FATitle}</h3>
-                    <button onClick={() => { setShowDisable(false); setEmailDisableCodeSent(false); }} className="text-white/30 hover:text-white">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{t.account.disable2FATitle}</h3>
+                    <button onClick={() => { setShowDisable(false); setEmailDisableCodeSent(false); }} className="text-foreground/30 hover:text-foreground">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <p className="text-xs text-white/40 mb-5 leading-relaxed">
+                  <p className="text-xs text-foreground/40 mb-5 leading-relaxed">
                     {mfaMethod === "email" ? t.account.disable2FAEmailDesc : t.account.disable2FADesc}
                   </p>
                   {mfaMethod === "email" && !emailDisableCodeSent ? (
@@ -658,7 +658,7 @@ export default function Account() {
                       <button
                         onClick={sendEmailDisableCode}
                         disabled={emailDisableSending}
-                        className="w-full bg-white text-black py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                        className="w-full bg-foreground text-background py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
                       >
                         {emailDisableSending ? t.account.sendingCode : t.account.sendCode}
                       </button>
@@ -676,13 +676,13 @@ export default function Account() {
                         onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, ""))}
                         placeholder={mfaMethod === "email" ? "00000000" : "000000"}
                         autoFocus
-                        className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-white/30 transition-colors mb-4"
+                        className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-foreground/30 transition-colors mb-4"
                       />
                       {mfaError && <p className="text-red-400/80 text-xs mb-3">{mfaError}</p>}
                       <button
                         onClick={confirmDisable2FA}
                         disabled={mfaLoading || disableCode.length !== (mfaMethod === "email" ? 8 : 6)}
-                        className="w-full bg-red-500/80 text-white py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-red-500 transition-colors disabled:opacity-40"
+                        className="w-full bg-red-500/80 text-foreground py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-red-500 transition-colors disabled:opacity-40"
                       >
                         {mfaLoading ? t.account.disabling : t.account.disable2FATitle}
                       </button>
@@ -706,15 +706,15 @@ export default function Account() {
               <motion.div
                 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-lg bg-[#0a0a0a] border border-white/10 max-h-[90vh] overflow-y-auto"
+                className="w-full max-w-lg bg-card border border-foreground/10 max-h-[90vh] overflow-y-auto"
               >
                 {/* Header */}
-                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-white/8">
+                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-foreground/8">
                   <div>
-                    <p className="text-[9px] uppercase tracking-[0.5em] text-white/25 mb-1">Order Details</p>
-                    <p className="text-[10px] text-white/20 font-mono">{activeOrder.id.split("-")[0].toUpperCase()}</p>
+                    <p className="text-[9px] uppercase tracking-[0.5em] text-foreground/25 mb-1">Order Details</p>
+                    <p className="text-[10px] text-foreground/20 font-mono">{activeOrder.id.split("-")[0].toUpperCase()}</p>
                   </div>
-                  <button onClick={() => setActiveOrder(null)} className="text-white/30 hover:text-white transition-colors">
+                  <button onClick={() => setActiveOrder(null)} className="text-foreground/30 hover:text-foreground transition-colors">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -723,17 +723,17 @@ export default function Account() {
                   {/* Status + Date */}
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Placed on</p>
-                      <p className="text-sm text-white/70">
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-2">Placed on</p>
+                      <p className="text-sm text-foreground/70">
                         {new Date(activeOrder.created_at).toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" })}
                       </p>
-                      <p className="text-xs text-white/30 mt-0.5">
+                      <p className="text-xs text-foreground/30 mt-0.5">
                         {new Date(activeOrder.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Status</p>
-                      <span className={`text-xs uppercase tracking-widest font-semibold ${STATUS_COLORS[activeOrder.status] || "text-white/50"}`}>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-2">Status</p>
+                      <span className={`text-xs uppercase tracking-widest font-semibold ${STATUS_COLORS[activeOrder.status] || "text-foreground/50"}`}>
                         {STATUS_LABEL[activeOrder.status] || activeOrder.status}
                       </span>
                     </div>
@@ -741,38 +741,38 @@ export default function Account() {
 
                   {/* Customer */}
                   <div>
-                    <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Customer</p>
-                    <div className="bg-white/3 border border-white/6 px-4 py-3 space-y-1">
-                      <p className="text-sm text-white/70">{profile?.name || user?.user_metadata?.name || "—"}</p>
-                      <p className="text-xs text-white/35">{user?.email}</p>
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-3">Customer</p>
+                    <div className="bg-foreground/3 border border-foreground/6 px-4 py-3 space-y-1">
+                      <p className="text-sm text-foreground/70">{profile?.name || user?.user_metadata?.name || "—"}</p>
+                      <p className="text-xs text-foreground/35">{user?.email}</p>
                     </div>
                   </div>
 
                   {/* Shipping address */}
                   <div>
-                    <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Shipping Address</p>
-                    <div className="bg-white/3 border border-white/6 px-4 py-3">
-                      <p className="text-sm text-white/60 leading-relaxed whitespace-pre-line">{activeOrder.shipping_address}</p>
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-3">Shipping Address</p>
+                    <div className="bg-foreground/3 border border-foreground/6 px-4 py-3">
+                      <p className="text-sm text-foreground/60 leading-relaxed whitespace-pre-line">{activeOrder.shipping_address}</p>
                     </div>
                   </div>
 
                   {/* Items */}
                   {activeOrder.order_items && activeOrder.order_items.length > 0 && (
                     <div>
-                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Items ({activeOrder.order_items.length})</p>
-                      <div className="border border-white/6 divide-y divide-white/5">
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-3">Items ({activeOrder.order_items.length})</p>
+                      <div className="border border-foreground/6 divide-y divide-foreground/5">
                         {activeOrder.order_items.map((item) => (
                           <div key={item.id} className="flex items-center justify-between px-4 py-3">
                             <div>
-                              <p className="text-sm text-white/70">{item.name}</p>
-                              <p className="text-xs text-white/30 mt-0.5">{item.size} · ×{item.quantity}</p>
+                              <p className="text-sm text-foreground/70">{item.name}</p>
+                              <p className="text-xs text-foreground/30 mt-0.5">{item.size} · ×{item.quantity}</p>
                             </div>
-                            <p className="text-sm text-white/50">€{(item.price * item.quantity).toFixed(2)}</p>
+                            <p className="text-sm text-foreground/50">€{(item.price * item.quantity).toFixed(2)}</p>
                           </div>
                         ))}
-                        <div className="flex items-center justify-between px-4 py-3 bg-white/3">
-                          <p className="text-xs uppercase tracking-[0.35em] text-white/40">Total</p>
-                          <p className="text-sm font-semibold text-white">€{activeOrder.total_price.toFixed(2)}</p>
+                        <div className="flex items-center justify-between px-4 py-3 bg-foreground/3">
+                          <p className="text-xs uppercase tracking-[0.35em] text-foreground/40">Total</p>
+                          <p className="text-sm font-semibold text-foreground">€{activeOrder.total_price.toFixed(2)}</p>
                         </div>
                       </div>
                     </div>
@@ -781,13 +781,13 @@ export default function Account() {
                   {/* Cancellation reason */}
                   {activeOrder.status === "cancelled" && activeOrder.cancellation_reason && (
                     <div>
-                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Cancellation Reason</p>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-foreground/25 mb-3">Cancellation Reason</p>
                       <p className="text-xs text-red-400/50 italic leading-relaxed">{activeOrder.cancellation_reason}</p>
                     </div>
                   )}
 
                   {/* Actions */}
-                  <div className="flex flex-wrap gap-3 pt-2 border-t border-white/8">
+                  <div className="flex flex-wrap gap-3 pt-2 border-t border-foreground/8">
                     {activeOrder.status === "shipped" && (
                       <button
                         onClick={() => { confirmDelivery(activeOrder.id); setActiveOrder((o) => o ? { ...o, status: "delivered" as any } : o); }}
@@ -809,7 +809,7 @@ export default function Account() {
                       <button
                         onClick={() => { deleteOrder(activeOrder.id); setActiveOrder(null); }}
                         disabled={deletingOrderId === activeOrder.id}
-                        className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-red-400/70 border border-white/10 hover:border-red-400/30 px-3 py-2 transition-colors disabled:opacity-40"
+                        className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.3em] text-foreground/25 hover:text-red-400/70 border border-foreground/10 hover:border-red-400/30 px-3 py-2 transition-colors disabled:opacity-40"
                       >
                         <Trash2 className="w-3 h-3" />
                         {deletingOrderId === activeOrder.id ? t.account.deletingOrder : t.account.deleteOrder}
@@ -817,7 +817,7 @@ export default function Account() {
                     )}
                     <button
                       onClick={() => setActiveOrder(null)}
-                      className="ml-auto text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-white/60 px-3 py-2 transition-colors"
+                      className="ml-auto text-[9px] uppercase tracking-[0.3em] text-foreground/25 hover:text-foreground/60 px-3 py-2 transition-colors"
                     >
                       Close
                     </button>
@@ -840,35 +840,35 @@ export default function Account() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-md bg-[#0a0a0a] border border-white/10"
+                className="w-full max-w-md bg-card border border-foreground/10"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-sm font-semibold text-white uppercase tracking-widest">{t.account.cancelOrder}</h3>
-                    <button onClick={() => { setCancelOrderId(null); setCancelReason(""); setCancelError(null); }} className="text-white/30 hover:text-white">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{t.account.cancelOrder}</h3>
+                    <button onClick={() => { setCancelOrderId(null); setCancelReason(""); setCancelError(null); }} className="text-foreground/30 hover:text-foreground">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <p className="text-xs text-white/40 mb-5 leading-relaxed">{t.account.cancelOrderDesc}</p>
+                  <p className="text-xs text-foreground/40 mb-5 leading-relaxed">{t.account.cancelOrderDesc}</p>
                   <textarea
                     value={cancelReason}
                     onChange={(e) => setCancelReason(e.target.value)}
                     placeholder={t.account.cancelReason}
                     rows={4}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors resize-none mb-4"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors resize-none mb-4"
                   />
                   {cancelError && <p className="text-red-400/80 text-xs mb-3">{cancelError}</p>}
                   <div className="flex gap-3">
                     <button
                       onClick={() => { setCancelOrderId(null); setCancelReason(""); setCancelError(null); }}
-                      className="flex-1 border border-white/15 text-white/40 hover:text-white hover:border-white/40 py-3 text-xs uppercase tracking-[0.4em] transition-colors"
+                      className="flex-1 border border-foreground/15 text-foreground/40 hover:text-foreground hover:border-foreground/40 py-3 text-xs uppercase tracking-[0.4em] transition-colors"
                     >
                       {t.account.back}
                     </button>
                     <button
                       onClick={cancelOrder}
                       disabled={cancelling || !cancelReason.trim()}
-                      className="flex-1 bg-red-500/80 text-white py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-red-500 transition-colors disabled:opacity-40"
+                      className="flex-1 bg-red-500/80 text-foreground py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-red-500 transition-colors disabled:opacity-40"
                     >
                       {cancelling ? t.account.cancelling : t.account.cancelBtn}
                     </button>
@@ -893,92 +893,92 @@ export default function Account() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-md bg-[#0a0a0a] border border-white/10"
+                className="w-full max-w-md bg-card border border-foreground/10"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-sm font-semibold text-white uppercase tracking-widest">{t.account.addAddress}</h3>
-                    <button onClick={() => setShowAddForm(false)} className="text-white/30 hover:text-white">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest">{t.account.addAddress}</h3>
+                    <button onClick={() => setShowAddForm(false)} className="text-foreground/30 hover:text-foreground">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
                   <form onSubmit={addAddress} className="space-y-4">
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">
-                        Label <span className="text-white/20">(optional)</span>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">
+                        Label <span className="text-foreground/20">(optional)</span>
                       </label>
                       <input
                         type="text"
                         value={newLabel}
                         onChange={(e) => setNewLabel(e.target.value)}
                         placeholder={`"Home", "Work"`}
-                        className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                       />
                     </div>
                     <div className="flex gap-3">
                       <div className="flex-1">
-                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Street</label>
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">Street</label>
                         <input
                           type="text"
                           value={addrStreet}
                           onChange={(e) => setAddrStreet(e.target.value)}
                           placeholder="123 Main St"
                           required
-                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                          className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                         />
                       </div>
                       <div className="w-24">
-                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">No.</label>
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">No.</label>
                         <input
                           type="text"
                           value={addrNumber}
                           onChange={(e) => setAddrNumber(e.target.value)}
                           placeholder="12"
                           required
-                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                          className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                         />
                       </div>
                     </div>
                     <div className="flex gap-3">
                       <div className="w-28">
-                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">ZIP</label>
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">ZIP</label>
                         <input
                           type="text"
                           value={addrZip}
                           onChange={(e) => setAddrZip(e.target.value)}
                           placeholder="10115"
                           required
-                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                          className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                         />
                       </div>
                       <div className="flex-1">
-                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">City</label>
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">City</label>
                         <input
                           type="text"
                           value={addrCity}
                           onChange={(e) => setAddrCity(e.target.value)}
                           placeholder="Berlin"
                           required
-                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                          className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Country</label>
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">Country</label>
                       <input
                         type="text"
                         value={addrCountry}
                         onChange={(e) => setAddrCountry(e.target.value)}
                         placeholder="Germany"
                         required
-                        className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors"
                       />
                     </div>
                     {addError && <p className="text-red-400/80 text-xs">{addError}</p>}
                     <button
                       type="submit"
                       disabled={addingAddress || !addrStreet.trim() || !addrNumber.trim() || !addrZip.trim() || !addrCity.trim() || !addrCountry.trim()}
-                      className="w-full bg-white text-black py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                      className="w-full bg-foreground text-background py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
                     >
                       {addingAddress ? "Saving..." : "Save Address"}
                     </button>

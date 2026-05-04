@@ -3,8 +3,10 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import xfLogo from "@assets/ChatGPT_Image_3._Mai_2026,_19_49_35_1777830790029.png";
+import xfLogoDark from "/logo-dark.png";
 import { featured } from "@/data/products";
 import { useLang } from "@/context/LanguageContext";
+import { useTheme } from "@/context/ThemeContext";
 
 const TARGET_DATE = new Date("2026-09-01T00:00:00");
 
@@ -29,6 +31,8 @@ function useCountdown() {
 export default function Home() {
   const { days, hours, minutes } = useCountdown();
   const { t } = useLang();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -53,7 +57,7 @@ export default function Home() {
             className="mb-10"
           >
             <img
-              src={xfLogo}
+              src={isDark ? xfLogo : xfLogoDark}
               alt="XF"
               data-testid="img-xf-logo-hero"
               className="h-28 md:h-36 w-auto dark:drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]"
@@ -210,7 +214,7 @@ export default function Home() {
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
                       <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                        <div className="bg-white text-black text-[10px] uppercase tracking-[0.4em] py-3 text-center font-semibold">
+                        <div className="bg-foreground text-background text-[10px] uppercase tracking-[0.4em] py-3 text-center font-semibold">
                           {t.shop.viewProduct}
                         </div>
                       </div>

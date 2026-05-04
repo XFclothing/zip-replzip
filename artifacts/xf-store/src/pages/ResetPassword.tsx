@@ -59,7 +59,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
       <AnimatePresence mode="wait">
 
         {/* Step 1 — Enter email */}
@@ -72,35 +72,35 @@ export default function ResetPassword() {
             <div className="flex justify-center mb-10">
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
-            <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-2 text-center">Password Reset</p>
-            <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-8 text-center">Forgot Password</h2>
-            <p className="text-sm text-white/40 leading-relaxed mb-8 text-center">
+            <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-2 text-center">Password Reset</p>
+            <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-8 text-center">Forgot Password</h2>
+            <p className="text-sm text-foreground/40 leading-relaxed mb-8 text-center">
               Enter your email and we'll send you a link to reset your password.
             </p>
             <form onSubmit={handleRequest} className="space-y-4">
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Email</label>
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 text-sm outline-none focus:border-white/30 transition-colors"
+                  className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 text-sm outline-none focus:border-foreground/30 transition-colors"
                 />
               </div>
               {error && <p className="text-red-400/80 text-xs tracking-wide">{error}</p>}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 mt-2"
+                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-50 mt-2"
               >
                 {loading ? "Sending..." : "Send Reset Link"}
               </button>
             </form>
             <div className="mt-8 text-center">
               <button onClick={() => navigate("/login")}
-                className="text-white/25 hover:text-white/60 text-xs uppercase tracking-widest transition-colors">
+                className="text-foreground/25 hover:text-foreground/60 text-xs uppercase tracking-widest transition-colors">
                 ← Back to Sign In
               </button>
             </div>
@@ -117,20 +117,20 @@ export default function ResetPassword() {
             <div className="flex justify-center mb-10">
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
-            <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">Check Your Inbox</p>
-            <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-6">Link Sent</h2>
-            <p className="text-sm text-white/40 leading-relaxed">
+            <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">Check Your Inbox</p>
+            <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-6">Link Sent</h2>
+            <p className="text-sm text-foreground/40 leading-relaxed">
               We sent a password reset link to<br />
-              <span className="text-white/70">{email}</span>
+              <span className="text-foreground/70">{email}</span>
             </p>
-            <div className="mt-10 border border-white/8 p-6">
-              <p className="text-[10px] uppercase tracking-widest text-white/25">
+            <div className="mt-10 border border-foreground/8 p-6">
+              <p className="text-[10px] uppercase tracking-widest text-foreground/25">
                 Click the link in the email to set a new password
               </p>
             </div>
             <div className="mt-8">
               <button onClick={() => navigate("/login")}
-                className="text-white/25 hover:text-white/60 text-xs uppercase tracking-widest transition-colors">
+                className="text-foreground/25 hover:text-foreground/60 text-xs uppercase tracking-widest transition-colors">
                 ← Back to Sign In
               </button>
             </div>
@@ -147,11 +147,11 @@ export default function ResetPassword() {
             <div className="flex justify-center mb-10">
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
-            <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-2 text-center">Password Reset</p>
-            <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-8 text-center">New Password</h2>
+            <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-2 text-center">Password Reset</p>
+            <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-8 text-center">New Password</h2>
             <form onSubmit={handleUpdate} className="space-y-4">
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">New Password</label>
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">New Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -160,16 +160,16 @@ export default function ResetPassword() {
                     placeholder="••••••••"
                     required
                     minLength={6}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-foreground/30 transition-colors"
                   />
                   <button type="button" onClick={() => setShowPassword(v => !v)} tabIndex={-1}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors">
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground/70 transition-colors">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Confirm Password</label>
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">Confirm Password</label>
                 <div className="relative">
                   <input
                     type={showConfirm ? "text" : "password"}
@@ -178,10 +178,10 @@ export default function ResetPassword() {
                     placeholder="••••••••"
                     required
                     minLength={6}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-foreground/30 transition-colors"
                   />
                   <button type="button" onClick={() => setShowConfirm(v => !v)} tabIndex={-1}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors">
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground/70 transition-colors">
                     {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
@@ -190,7 +190,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 mt-2"
+                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-50 mt-2"
               >
                 {loading ? "Updating..." : "Set New Password"}
               </button>
@@ -208,9 +208,9 @@ export default function ResetPassword() {
             <div className="flex justify-center mb-10">
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
-            <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">All Done</p>
-            <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-4">Password Updated</h2>
-            <p className="text-sm text-white/40">Redirecting you to your account...</p>
+            <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">All Done</p>
+            <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-4">Password Updated</h2>
+            <p className="text-sm text-foreground/40">Redirecting you to your account...</p>
           </motion.div>
         )}
 

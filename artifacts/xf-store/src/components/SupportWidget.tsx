@@ -8,7 +8,7 @@ import { sendTicketNotificationToStaff } from "@/lib/email";
 const TICKET_STATUS_COLORS: Record<string, string> = {
   open: "text-yellow-400/80",
   answered: "text-green-400/80",
-  closed: "text-white/30",
+  closed: "text-foreground/30",
 };
 
 type View = "list" | "ticket" | "new";
@@ -135,34 +135,34 @@ export function SupportWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[340px] h-[500px] bg-[#0a0a0a] border border-white/10 flex flex-col shadow-2xl"
+            className="w-[340px] h-[500px] bg-card border border-foreground/10 flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 flex-shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/8 flex-shrink-0">
               <div className="flex items-center gap-3">
                 {view !== "list" && (
-                  <button onClick={() => setView("list")} className="text-white/30 hover:text-white transition-colors mr-1">
+                  <button onClick={() => setView("list")} className="text-foreground/30 hover:text-foreground transition-colors mr-1">
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                 )}
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.4em] text-white/30">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/30">
                     {view === "list" ? "Help Center" : view === "new" ? "New Ticket" : activeTicket?.subject}
                   </p>
-                  {view === "list" && <p className="text-xs text-white/60 mt-0.5">XF Support</p>}
+                  {view === "list" && <p className="text-xs text-foreground/60 mt-0.5">XF Support</p>}
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 {view === "list" && user && (
                   <button
                     onClick={() => { setCreateError(null); setSubject(""); setMessage(""); setView("new"); }}
-                    className="text-white/30 hover:text-white transition-colors"
+                    className="text-foreground/30 hover:text-foreground transition-colors"
                     title="New Ticket"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
                 )}
-                <button onClick={() => setOpen(false)} className="text-white/30 hover:text-white transition-colors">
+                <button onClick={() => setOpen(false)} className="text-foreground/30 hover:text-foreground transition-colors">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -173,12 +173,12 @@ export function SupportWidget() {
               {/* Not logged in */}
               {!user && (
                 <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-                  <MessageCircle className="w-8 h-8 text-white/20 mb-4" />
-                  <p className="text-white/50 text-sm mb-2">Sign in to contact support</p>
-                  <p className="text-white/25 text-xs mb-6">We're here to help with any questions.</p>
+                  <MessageCircle className="w-8 h-8 text-foreground/20 mb-4" />
+                  <p className="text-foreground/50 text-sm mb-2">Sign in to contact support</p>
+                  <p className="text-foreground/25 text-xs mb-6">We're here to help with any questions.</p>
                   <a
                     href="/login?redirect=/support"
-                    className="px-5 py-2.5 border border-white/20 text-xs uppercase tracking-[0.35em] text-white/60 hover:text-white hover:border-white/50 transition-colors"
+                    className="px-5 py-2.5 border border-foreground/20 text-xs uppercase tracking-[0.35em] text-foreground/60 hover:text-foreground hover:border-foreground/50 transition-colors"
                   >
                     Sign In
                   </a>
@@ -190,16 +190,16 @@ export function SupportWidget() {
                 <div className="p-4">
                   {ticketsLoading ? (
                     <div className="flex justify-center py-12">
-                      <div className="w-4 h-4 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+                      <div className="w-4 h-4 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
                     </div>
                   ) : tickets.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center">
-                      <MessageCircle className="w-7 h-7 text-white/15 mb-4" />
-                      <p className="text-white/30 text-xs uppercase tracking-widest mb-2">No tickets yet</p>
-                      <p className="text-white/20 text-xs mb-6">Have a question? We're here to help.</p>
+                      <MessageCircle className="w-7 h-7 text-foreground/15 mb-4" />
+                      <p className="text-foreground/30 text-xs uppercase tracking-widest mb-2">No tickets yet</p>
+                      <p className="text-foreground/20 text-xs mb-6">Have a question? We're here to help.</p>
                       <button
                         onClick={() => { setCreateError(null); setSubject(""); setMessage(""); setView("new"); }}
-                        className="px-4 py-2 border border-white/20 text-[10px] uppercase tracking-[0.35em] text-white/50 hover:text-white hover:border-white/50 transition-colors"
+                        className="px-4 py-2 border border-foreground/20 text-[10px] uppercase tracking-[0.35em] text-foreground/50 hover:text-foreground hover:border-foreground/50 transition-colors"
                       >
                         Open a Ticket
                       </button>
@@ -210,12 +210,12 @@ export function SupportWidget() {
                         <button
                           key={ticket.id}
                           onClick={() => openTicket(ticket)}
-                          className="w-full border border-white/8 p-4 text-left hover:border-white/20 transition-colors"
+                          className="w-full border border-foreground/8 p-4 text-left hover:border-foreground/20 transition-colors"
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs text-white/80 font-medium truncate">{ticket.subject}</p>
-                              <p className="text-[10px] text-white/30 mt-1">
+                              <p className="text-xs text-foreground/80 font-medium truncate">{ticket.subject}</p>
+                              <p className="text-[10px] text-foreground/30 mt-1">
                                 {new Date(ticket.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                               </p>
                             </div>
@@ -234,32 +234,32 @@ export function SupportWidget() {
               {user && view === "new" && (
                 <form onSubmit={createTicket} className="p-5 space-y-4">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.4em] text-white/30 mb-2">Subject</label>
+                    <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Subject</label>
                     <input
                       type="text"
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
                       placeholder="What's your issue?"
                       required
-                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-3 py-2.5 text-xs outline-none focus:border-white/30 transition-colors"
+                      className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-3 py-2.5 text-xs outline-none focus:border-foreground/30 transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.4em] text-white/30 mb-2">Message</label>
+                    <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2">Message</label>
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Describe your issue in detail..."
                       required
                       rows={6}
-                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-3 py-2.5 text-xs outline-none focus:border-white/30 transition-colors resize-none"
+                      className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-3 py-2.5 text-xs outline-none focus:border-foreground/30 transition-colors resize-none"
                     />
                   </div>
                   {createError && <p className="text-red-400/70 text-xs">{createError}</p>}
                   <button
                     type="submit"
                     disabled={creating || !subject.trim() || !message.trim()}
-                    className="w-full bg-white text-black py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                    className="w-full bg-foreground text-background py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
                   >
                     {creating ? "Sending..." : "Send Ticket"}
                   </button>
@@ -273,13 +273,13 @@ export function SupportWidget() {
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`p-3 ${msg.sender_role === "worker" ? "bg-white/8 ml-3" : "bg-white/3 mr-3"}`}
+                        className={`p-3 ${msg.sender_role === "worker" ? "bg-foreground/8 ml-3" : "bg-foreground/3 mr-3"}`}
                       >
-                        <p className={`text-[9px] uppercase tracking-widest mb-1.5 ${msg.sender_role === "worker" ? "text-blue-400/50" : "text-white/25"}`}>
+                        <p className={`text-[9px] uppercase tracking-widest mb-1.5 ${msg.sender_role === "worker" ? "text-blue-400/50" : "text-foreground/25"}`}>
                           {msg.sender_role === "worker" ? "Support" : "You"}
                         </p>
-                        <p className="text-xs text-white/70 leading-relaxed">{msg.message}</p>
-                        <p className="text-[9px] text-white/15 mt-1.5">{new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+                        <p className="text-xs text-foreground/70 leading-relaxed">{msg.message}</p>
+                        <p className="text-[9px] text-foreground/15 mt-1.5">{new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
                       </div>
                     ))}
                     <div ref={messagesEndRef} />
@@ -290,27 +290,27 @@ export function SupportWidget() {
 
             {/* Reply bar (ticket view) */}
             {user && view === "ticket" && activeTicket?.status !== "closed" && (
-              <div className="flex gap-2 p-3 border-t border-white/8 flex-shrink-0">
+              <div className="flex gap-2 p-3 border-t border-foreground/8 flex-shrink-0">
                 <input
                   type="text"
                   value={reply}
                   onChange={(e) => setReply(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendReply()}
                   placeholder="Reply..."
-                  className="flex-1 bg-white/5 border border-white/10 text-white placeholder-white/20 px-3 py-2 text-xs outline-none focus:border-white/30 transition-colors"
+                  className="flex-1 bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-3 py-2 text-xs outline-none focus:border-foreground/30 transition-colors"
                 />
                 <button
                   onClick={sendReply}
                   disabled={!reply.trim() || replying}
-                  className="px-3 py-2 bg-white text-black hover:bg-white/90 transition-colors disabled:opacity-30"
+                  className="px-3 py-2 bg-foreground text-background hover:bg-foreground/90 transition-colors disabled:opacity-30"
                 >
                   <Send className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}
             {user && view === "ticket" && activeTicket?.status === "closed" && (
-              <div className="px-5 py-3 border-t border-white/8 flex-shrink-0">
-                <p className="text-[10px] uppercase tracking-widest text-white/25 text-center">This ticket is closed</p>
+              <div className="px-5 py-3 border-t border-foreground/8 flex-shrink-0">
+                <p className="text-[10px] uppercase tracking-widest text-foreground/25 text-center">This ticket is closed</p>
               </div>
             )}
           </motion.div>
@@ -322,7 +322,7 @@ export function SupportWidget() {
         onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="relative text-white/50 hover:text-white transition-colors"
+        className="relative text-foreground/50 hover:text-foreground transition-colors"
         aria-label="Support"
       >
         <AnimatePresence mode="wait">

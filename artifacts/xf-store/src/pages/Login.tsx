@@ -184,7 +184,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
       <AnimatePresence mode="wait">
 
         {screen === "auth" && (
@@ -200,13 +200,13 @@ export default function Login() {
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
 
-            <div className="flex border-b border-white/10 mb-8">
+            <div className="flex border-b border-foreground/10 mb-8">
               {(["login", "signup"] as const).map((m) => (
                 <button
                   key={m}
                   onClick={() => { setMode(m); setError(null); }}
                   className={`flex-1 pb-3 text-xs uppercase tracking-[0.4em] transition-colors ${
-                    mode === m ? "text-white border-b border-white -mb-px" : "text-white/30 hover:text-white/60"
+                    mode === m ? "text-foreground border-b border-white -mb-px" : "text-foreground/30 hover:text-foreground/60"
                   }`}
                 >
                   {m === "login" ? t.login.signIn : t.login.signUp}
@@ -217,44 +217,44 @@ export default function Login() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <div>
-                  <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">{t.login.name}</label>
+                  <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">{t.login.name}</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t.login.yourName}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 text-sm outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 text-sm outline-none focus:border-foreground/30 transition-colors"
                     required
                   />
                 </div>
               )}
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">{t.login.email}</label>
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">{t.login.email}</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 text-sm outline-none focus:border-white/30 transition-colors"
+                  className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 text-sm outline-none focus:border-foreground/30 transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">{t.login.password}</label>
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-2">{t.login.password}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3.5 pr-12 text-sm outline-none focus:border-foreground/30 transition-colors"
                     required
                     minLength={6}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground/70 transition-colors"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -267,25 +267,25 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
               >
                 {loading ? t.login.sending : mode === "login" ? t.login.signIn : t.login.createAccount}
               </button>
 
               {mode === "login" && (
                 <div className="text-center mt-3">
-                  <a href="/reset-password" className="text-white/25 hover:text-white/60 text-xs uppercase tracking-widest transition-colors">
+                  <a href="/reset-password" className="text-foreground/25 hover:text-foreground/60 text-xs uppercase tracking-widest transition-colors">
                     {t.login.forgotPassword}
                   </a>
                 </div>
               )}
             </form>
 
-            <p className="text-center text-white/25 text-xs tracking-widest mt-8">
+            <p className="text-center text-foreground/25 text-xs tracking-widest mt-8">
               {mode === "login" ? t.login.newHere : t.login.alreadyHave}{" "}
               <button
                 onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); }}
-                className="text-white/60 hover:text-white transition-colors underline"
+                className="text-foreground/60 hover:text-foreground transition-colors underline"
               >
                 {mode === "login" ? t.login.signUpLink : t.login.signInLink}
               </button>
@@ -306,9 +306,9 @@ export default function Login() {
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
             <div className="mb-8 text-center">
-              <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">{t.login.security}</p>
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-3">{t.login.twoFactor}</h2>
-              <p className="text-sm text-white/40 leading-relaxed">{t.login.twoFactorDesc}</p>
+              <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">{t.login.security}</p>
+              <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-3">{t.login.twoFactor}</h2>
+              <p className="text-sm text-foreground/40 leading-relaxed">{t.login.twoFactorDesc}</p>
             </div>
             <form onSubmit={handleMfaVerify} className="space-y-5">
               <input
@@ -319,13 +319,13 @@ export default function Login() {
                 onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ""))}
                 placeholder="000000"
                 autoFocus
-                className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-4 text-center text-2xl tracking-[0.6em] outline-none focus:border-white/30 transition-colors"
+                className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-4 text-center text-2xl tracking-[0.6em] outline-none focus:border-foreground/30 transition-colors"
               />
               {error && <p className="text-red-400/80 text-xs tracking-wide text-center">{error}</p>}
               <button
                 type="submit"
                 disabled={loading || mfaCode.length !== 6}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
               >
                 {loading ? t.login.verifying : t.login.confirm}
               </button>
@@ -333,7 +333,7 @@ export default function Login() {
             <div className="mt-6 text-center">
               <button
                 onClick={() => { setScreen("auth"); setError(null); setMfaCode(""); }}
-                className="text-white/25 hover:text-white/50 text-xs uppercase tracking-widest transition-colors"
+                className="text-foreground/25 hover:text-foreground/50 text-xs uppercase tracking-widest transition-colors"
               >
                 {t.login.back}
               </button>
@@ -354,16 +354,16 @@ export default function Login() {
               <img src={xfLogo} alt="XF" className="h-10 w-auto" />
             </div>
             <div className="mb-8 text-center">
-              <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">{t.login.security}</p>
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-3">{t.login.twoFactor}</h2>
-              <p className="text-sm text-white/40 leading-relaxed">
+              <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">{t.login.security}</p>
+              <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-3">{t.login.twoFactor}</h2>
+              <p className="text-sm text-foreground/40 leading-relaxed">
                 {t.login.codeSentTo}<br />
-                <span className="text-white/70">{email}</span>
+                <span className="text-foreground/70">{email}</span>
               </p>
             </div>
             {emailMfaSending ? (
               <div className="flex justify-center py-8">
-                <div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+                <div className="w-5 h-5 border border-foreground/20 border-t-foreground/60 rounded-full animate-spin" />
               </div>
             ) : (
               <form onSubmit={handleEmailMfaVerify} className="space-y-5">
@@ -375,31 +375,31 @@ export default function Login() {
                   onChange={(e) => setEmailMfaCode(e.target.value.replace(/\D/g, ""))}
                   placeholder="00000000"
                   autoFocus
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-4 text-center text-2xl tracking-[0.6em] outline-none focus:border-white/30 transition-colors"
+                  className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-4 text-center text-2xl tracking-[0.6em] outline-none focus:border-foreground/30 transition-colors"
                 />
                 {error && <p className="text-red-400/80 text-xs tracking-wide text-center">{error}</p>}
                 <button
                   type="submit"
                   disabled={loading || emailMfaCode.length !== 8}
-                  className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                  className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
                 >
                   {loading ? t.login.verifying : t.login.confirm}
                 </button>
               </form>
             )}
             <div className="mt-6 text-center space-y-3">
-              <p className="text-white/25 text-xs tracking-widest">{t.login.didntReceive}</p>
+              <p className="text-foreground/25 text-xs tracking-widest">{t.login.didntReceive}</p>
               <button
                 onClick={handleEmailMfaResend}
                 disabled={emailMfaResent}
-                className="text-white/50 hover:text-white text-xs uppercase tracking-widest transition-colors border-b border-white/15 hover:border-white/40 pb-0.5 disabled:opacity-40"
+                className="text-foreground/50 hover:text-foreground text-xs uppercase tracking-widest transition-colors border-b border-foreground/15 hover:border-foreground/40 pb-0.5 disabled:opacity-40"
               >
                 {emailMfaResent ? t.login.codeSent : t.login.resendCode}
               </button>
               <div>
                 <button
                   onClick={() => { setScreen("auth"); setError(null); setEmailMfaCode(""); }}
-                  className="text-white/25 hover:text-white/50 text-xs uppercase tracking-widest transition-colors mt-2 inline-block"
+                  className="text-foreground/25 hover:text-foreground/50 text-xs uppercase tracking-widest transition-colors mt-2 inline-block"
                 >
                   {t.login.back}
                 </button>
@@ -422,17 +422,17 @@ export default function Login() {
             </div>
 
             <div className="mb-8 text-center">
-              <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">{t.login.verifyEmail}</p>
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-white mb-3">{t.login.checkInbox}</h2>
-              <p className="text-sm text-white/40 leading-relaxed">
+              <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">{t.login.verifyEmail}</p>
+              <h2 className="text-2xl font-bold uppercase tracking-widest text-foreground mb-3">{t.login.checkInbox}</h2>
+              <p className="text-sm text-foreground/40 leading-relaxed">
                 {t.login.codeSentTo}<br />
-                <span className="text-white/70">{email}</span>
+                <span className="text-foreground/70">{email}</span>
               </p>
             </div>
 
             <form onSubmit={handleVerify} className="space-y-6">
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-4 text-center">
+                <label className="block text-[10px] uppercase tracking-[0.4em] text-foreground/40 mb-4 text-center">
                   {t.login.verificationCode}
                 </label>
                 <div className="flex gap-2 justify-center" onPaste={handleOtpPaste}>
@@ -446,7 +446,7 @@ export default function Login() {
                       value={digit}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                      className="w-12 h-14 text-center text-xl font-bold text-white bg-white/5 border border-white/15 outline-none focus:border-white/60 transition-colors caret-transparent"
+                      className="w-12 h-14 text-center text-xl font-bold text-foreground bg-foreground/5 border border-foreground/15 outline-none focus:border-foreground/60 transition-colors caret-transparent"
                     />
                   ))}
                 </div>
@@ -457,25 +457,25 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading || otp.join("").length < 8}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
+                className="w-full bg-foreground text-background py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
               >
                 {loading ? t.login.verifying : t.login.verifyAndContinue}
               </button>
             </form>
 
             <div className="mt-8 text-center space-y-3">
-              <p className="text-white/25 text-xs tracking-widest">{t.login.didntReceive}</p>
+              <p className="text-foreground/25 text-xs tracking-widest">{t.login.didntReceive}</p>
               <button
                 onClick={handleResend}
                 disabled={resending || resent}
-                className="text-white/50 hover:text-white text-xs uppercase tracking-widest transition-colors border-b border-white/15 hover:border-white/40 pb-0.5 disabled:opacity-40"
+                className="text-foreground/50 hover:text-foreground text-xs uppercase tracking-widest transition-colors border-b border-foreground/15 hover:border-foreground/40 pb-0.5 disabled:opacity-40"
               >
                 {resent ? t.login.codeSent : resending ? t.login.resending : t.login.resendCode}
               </button>
               <div>
                 <button
                   onClick={() => { setScreen("auth"); setOtp(["","","","","","","",""]); setError(null); }}
-                  className="text-white/25 hover:text-white/50 text-xs uppercase tracking-widest transition-colors mt-2 inline-block"
+                  className="text-foreground/25 hover:text-foreground/50 text-xs uppercase tracking-widest transition-colors mt-2 inline-block"
                 >
                   {t.login.back}
                 </button>

@@ -42,19 +42,19 @@ export default function CheckoutSuccess() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-white/40 animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-foreground/40 animate-spin" />
       </div>
     );
   }
 
   if (status === "error") {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center px-6">
+      <div className="min-h-screen bg-background flex items-center justify-center px-6">
         <div className="text-center">
-          <p className="text-white/50 text-xs uppercase tracking-[0.4em] mb-4">Something went wrong</p>
-          <p className="text-white/30 text-xs mb-8">Your payment may have been processed. Check your email for confirmation.</p>
-          <button onClick={() => navigate("/")} className="text-white text-xs uppercase tracking-widest underline">
+          <p className="text-foreground/50 text-xs uppercase tracking-[0.4em] mb-4">Something went wrong</p>
+          <p className="text-foreground/30 text-xs mb-8">Your payment may have been processed. Check your email for confirmation.</p>
+          <button onClick={() => navigate("/")} className="text-foreground text-xs uppercase tracking-widest underline">
             Go to Home
           </button>
         </div>
@@ -63,7 +63,7 @@ export default function CheckoutSuccess() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,16 +76,16 @@ export default function CheckoutSuccess() {
           transition={{ duration: 0.4, delay: 0.2, type: "spring" }}
           className="mb-8 flex justify-center"
         >
-          <CheckCircle className="w-16 h-16 text-white" strokeWidth={1} />
+          <CheckCircle className="w-16 h-16 text-foreground" strokeWidth={1} />
         </motion.div>
 
-        <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-3">Order Confirmed</p>
-        <h1 className="text-3xl font-bold uppercase tracking-widest text-white mb-4">Thank You</h1>
-        <p className="text-white/40 text-sm leading-relaxed mb-2">
+        <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-3">Order Confirmed</p>
+        <h1 className="text-3xl font-bold uppercase tracking-widest text-foreground mb-4">Thank You</h1>
+        <p className="text-foreground/40 text-sm leading-relaxed mb-2">
           Your payment was successful. You'll receive a confirmation email shortly.
         </p>
         {orderId && (
-          <p className="text-white/20 text-[10px] uppercase tracking-widest mb-10">
+          <p className="text-foreground/20 text-[10px] uppercase tracking-widest mb-10">
             Order #{orderId.slice(0, 8).toUpperCase()}
           </p>
         )}
@@ -93,13 +93,13 @@ export default function CheckoutSuccess() {
         <div className="flex flex-col gap-3 items-center">
           <button
             onClick={() => navigate("/account")}
-            className="bg-white text-black px-8 py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors"
+            className="bg-foreground text-background px-8 py-3 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-foreground/90 transition-colors"
           >
             View Orders
           </button>
           <button
             onClick={() => navigate("/shop")}
-            className="text-white/40 text-xs uppercase tracking-widest hover:text-white/70 transition-colors"
+            className="text-foreground/40 text-xs uppercase tracking-widest hover:text-foreground/70 transition-colors"
           >
             Continue Shopping
           </button>
