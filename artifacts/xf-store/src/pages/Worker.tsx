@@ -112,6 +112,15 @@ export default function Worker() {
     setActiveTicket((prev) => prev ? { ...prev, status: status as Ticket["status"] } : prev);
   }
 
+  async function closeAndDeleteTicket() {
+    if (!activeTicket) return;
+    await supabase.from("ticket_messages").delete().eq("ticket_id", activeTicket.id);
+    await supabase.from("tickets").delete().eq("id", activeTicket.id);
+    setTickets((prev) => prev.filter((t) => t.id !== activeTicket.id));
+    setActiveTicket(null);
+    setTicketMessages([]);
+  }
+
   const activeOrders = orders.filter((o) => o.status !== "delivered" && o.status !== "old_orders" && o.status !== "completed");
   const deliveredOrders = orders.filter((o) => o.status === "delivered" || o.status === "completed");
   const oldOrders = orders.filter((o) => o.status === "old_orders");
@@ -472,13 +481,22 @@ export default function Worker() {
                   rows={3}
                   className="w-full bg-foreground/5 border border-foreground/10 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/30 transition-colors resize-none mb-3"
                 />
-                <button
-                  onClick={sendReply}
-                  disabled={replying || !reply.trim()}
-                  className="w-full bg-foreground text-background py-3 text-xs uppercase tracking-[0.35em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
-                >
-                  {replying ? "Sending..." : "Send Reply"}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={sendReply}
+                    disabled={replying || !reply.trim()}
+                    className="flex-1 bg-foreground text-background py-3 text-xs uppercase tracking-[0.35em] font-semibold hover:bg-foreground/90 transition-colors disabled:opacity-40"
+                  >
+                    {replying ? "Sending..." : "Send Reply"}
+                  </button>
+                  <button
+                    onClick={closeAndDeleteTicket}
+                    className="px-4 py-3 text-xs uppercase tracking-[0.35em] border border-red-400/30 text-red-400/70 hover:bg-red-400/10 hover:text-red-400 transition-colors"
+                    title="Close & delete this ticket"
+                  >
+                    Close & Delete
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>
