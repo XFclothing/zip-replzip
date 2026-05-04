@@ -19,7 +19,7 @@ export const translations = {
       availableNow: "Available Now", shopAll: "Shop All",
     },
     shop: {
-      collection: "XF Collection", drop: "XF DROP",
+      collection: "XF Collection", drop: "UNSEEN DROP",
       hoodies: "Hoodies", tshirts: "T-Shirts", jogger: "JOGGER",
       viewProduct: "View Product",
     },
@@ -116,7 +116,7 @@ export const translations = {
       availableNow: "Jetzt verfügbar", shopAll: "Alles ansehen",
     },
     shop: {
-      collection: "XF Kollektion", drop: "XF DROP",
+      collection: "XF Kollektion", drop: "UNSEEN DROP",
       hoodies: "Hoodies", tshirts: "T-Shirts", jogger: "JOGGER",
       viewProduct: "Produkt ansehen",
     },
