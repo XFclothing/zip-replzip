@@ -48,6 +48,11 @@ export default function Account() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newLabel, setNewLabel] = useState("");
   const [newAddress, setNewAddress] = useState("");
+  const [addrStreet, setAddrStreet] = useState("");
+  const [addrNumber, setAddrNumber] = useState("");
+  const [addrZip, setAddrZip] = useState("");
+  const [addrCity, setAddrCity] = useState("");
+  const [addrCountry, setAddrCountry] = useState("");
   const [addingAddress, setAddingAddress] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
 
@@ -286,23 +291,25 @@ export default function Account() {
 
   async function addAddress(e: React.FormEvent) {
     e.preventDefault();
-    if (!newAddress.trim() || !user) return;
+    if (!addrStreet.trim() || !addrNumber.trim() || !addrZip.trim() || !addrCity.trim() || !addrCountry.trim() || !user) return;
     setAddingAddress(true);
     setAddError(null);
+    const composed = `${addrStreet.trim()} ${addrNumber.trim()}\n${addrZip.trim()} ${addrCity.trim()}\n${addrCountry.trim()}`;
     const isFirst = addresses.length === 0;
-    if (isFirst) {
-      await supabase.from("shipping_addresses").update({ is_default: false }).eq("user_id", user.id);
-    }
     const { error } = await supabase.from("shipping_addresses").insert({
       user_id: user.id,
       label: newLabel.trim() || null,
-      address: newAddress.trim(),
+      address: composed,
       is_default: isFirst,
     });
     if (error) { setAddError(error.message); setAddingAddress(false); return; }
     await fetchAddresses();
     setNewLabel("");
-    setNewAddress("");
+    setAddrStreet("");
+    setAddrNumber("");
+    setAddrZip("");
+    setAddrCity("");
+    setAddrCountry("");
     setShowAddForm(false);
     setAddingAddress(false);
   }
@@ -898,7 +905,7 @@ export default function Account() {
                   <form onSubmit={addAddress} className="space-y-4">
                     <div>
                       <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">
-                        {t.account.label} <span className="text-white/20">({t.account.optional})</span>
+                        Label <span className="text-white/20">(optional)</span>
                       </label>
                       <input
                         type="text"
@@ -908,24 +915,72 @@ export default function Account() {
                         className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
                       />
                     </div>
+                    <div className="flex gap-3">
+                      <div className="flex-1">
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Street</label>
+                        <input
+                          type="text"
+                          value={addrStreet}
+                          onChange={(e) => setAddrStreet(e.target.value)}
+                          placeholder="Musterstraße"
+                          required
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        />
+                      </div>
+                      <div className="w-24">
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">No.</label>
+                        <input
+                          type="text"
+                          value={addrNumber}
+                          onChange={(e) => setAddrNumber(e.target.value)}
+                          placeholder="12"
+                          required
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="w-28">
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">ZIP</label>
+                        <input
+                          type="text"
+                          value={addrZip}
+                          onChange={(e) => setAddrZip(e.target.value)}
+                          placeholder="10115"
+                          required
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">City</label>
+                        <input
+                          type="text"
+                          value={addrCity}
+                          onChange={(e) => setAddrCity(e.target.value)}
+                          placeholder="Berlin"
+                          required
+                          className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
+                        />
+                      </div>
+                    </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">{t.account.address}</label>
-                      <textarea
-                        value={newAddress}
-                        onChange={(e) => setNewAddress(e.target.value)}
-                        placeholder="Street, City, ZIP Code, Country"
-                        rows={3}
+                      <label className="block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-2">Country</label>
+                      <input
+                        type="text"
+                        value={addrCountry}
+                        onChange={(e) => setAddrCountry(e.target.value)}
+                        placeholder="Germany"
                         required
-                        className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors resize-none"
+                        className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
                       />
                     </div>
                     {addError && <p className="text-red-400/80 text-xs">{addError}</p>}
                     <button
                       type="submit"
-                      disabled={addingAddress || !newAddress.trim()}
+                      disabled={addingAddress || !addrStreet.trim() || !addrNumber.trim() || !addrZip.trim() || !addrCity.trim() || !addrCountry.trim()}
                       className="w-full bg-white text-black py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
                     >
-                      {addingAddress ? t.account.saving : t.account.saveAddress}
+                      {addingAddress ? "Saving..." : "Save Address"}
                     </button>
                   </form>
                 </div>
