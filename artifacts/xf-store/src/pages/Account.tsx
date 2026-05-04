@@ -73,6 +73,7 @@ export default function Account() {
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
   const [confirmingDelivery, setConfirmingDelivery] = useState<string | null>(null);
+  const [activeOrder, setActiveOrder] = useState<Order | null>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate("/login");
@@ -477,10 +478,14 @@ export default function Account() {
               ) : orders.length === 0 ? (
                 <p className="text-white/25 text-xs uppercase tracking-widest py-8">{t.account.noOrders}</p>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {orders.map((order) => (
-                    <div key={order.id} className="border border-white/8 p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <button
+                      key={order.id}
+                      onClick={() => setActiveOrder(order)}
+                      className="w-full border border-white/8 p-5 text-left hover:border-white/20 transition-colors group"
+                    >
+                      <div className="flex items-center justify-between">
                         <div>
                           <p className="text-[10px] text-white/30 uppercase tracking-widest">
                             {new Date(order.created_at).toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" })}
@@ -491,50 +496,15 @@ export default function Account() {
                           <span className={`text-xs uppercase tracking-widest font-medium ${STATUS_COLORS[order.status] || "text-white/50"}`}>
                             {STATUS_LABEL[order.status] || order.status}
                           </span>
-                          {order.status === "shipped" && (
-                            <button
-                              onClick={() => confirmDelivery(order.id)}
-                              disabled={confirmingDelivery === order.id}
-                              className="text-[9px] uppercase tracking-[0.3em] text-teal-400/70 hover:text-teal-400 border border-teal-400/20 hover:border-teal-400/50 px-2 py-1 transition-colors disabled:opacity-40"
-                            >
-                              {confirmingDelivery === order.id ? "..." : "Confirm Delivery"}
-                            </button>
-                          )}
-                          {(order.status === "pending" || order.status === "processing") && (
-                            <button
-                              onClick={() => { setCancelOrderId(order.id); setCancelReason(""); setCancelError(null); }}
-                              className="text-[9px] uppercase tracking-[0.3em] text-red-400/50 hover:text-red-400 border border-red-400/15 hover:border-red-400/40 px-2 py-1 transition-colors"
-                            >
-                              {t.account.cancel}
-                            </button>
-                          )}
-                          {order.status === "cancelled" && (
-                            <button
-                              onClick={() => deleteOrder(order.id)}
-                              disabled={deletingOrderId === order.id}
-                              className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-red-400/70 border border-white/10 hover:border-red-400/30 px-2 py-1 transition-colors disabled:opacity-40"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                              {deletingOrderId === order.id ? t.account.deletingOrder : t.account.deleteOrder}
-                            </button>
-                          )}
+                          <span className="text-white/15 group-hover:text-white/40 transition-colors text-xs">›</span>
                         </div>
                       </div>
                       {order.order_items && order.order_items.length > 0 && (
-                        <div className="space-y-2 border-t border-white/5 pt-4">
-                          {order.order_items.map((item) => (
-                            <div key={item.id} className="flex justify-between text-sm">
-                              <span className="text-white/60">{item.name} <span className="text-white/30">({item.size})</span> ×{item.quantity}</span>
-                              <span className="text-white/50">€{(item.price * item.quantity).toFixed(2)}</span>
-                            </div>
-                          ))}
-                        </div>
+                        <p className="text-xs text-white/25 mt-2">
+                          {order.order_items.map(i => i.name).join(", ")}
+                        </p>
                       )}
-                      <p className="text-xs text-white/25 mt-4 tracking-wide">{order.shipping_address}</p>
-                      {order.status === "cancelled" && order.cancellation_reason && (
-                        <p className="text-xs text-red-400/40 mt-2 italic">{t.account.cancelledReason}: {order.cancellation_reason}</p>
-                      )}
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
@@ -711,6 +681,140 @@ export default function Account() {
                       </button>
                     </>
                   )}
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Order Detail Modal */}
+      <AnimatePresence>
+        {activeOrder && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setActiveOrder(null)}
+              className="fixed inset-0 bg-black/80 z-[200] backdrop-blur-sm" />
+            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-lg bg-[#0a0a0a] border border-white/10 max-h-[90vh] overflow-y-auto"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-white/8">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.5em] text-white/25 mb-1">Order Details</p>
+                    <p className="text-[10px] text-white/20 font-mono">{activeOrder.id.split("-")[0].toUpperCase()}</p>
+                  </div>
+                  <button onClick={() => setActiveOrder(null)} className="text-white/30 hover:text-white transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="px-8 py-6 space-y-6">
+                  {/* Status + Date */}
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Placed on</p>
+                      <p className="text-sm text-white/70">
+                        {new Date(activeOrder.created_at).toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" })}
+                      </p>
+                      <p className="text-xs text-white/30 mt-0.5">
+                        {new Date(activeOrder.created_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Status</p>
+                      <span className={`text-xs uppercase tracking-widest font-semibold ${STATUS_COLORS[activeOrder.status] || "text-white/50"}`}>
+                        {STATUS_LABEL[activeOrder.status] || activeOrder.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Customer */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Customer</p>
+                    <div className="bg-white/3 border border-white/6 px-4 py-3 space-y-1">
+                      <p className="text-sm text-white/70">{profile?.name || user?.user_metadata?.name || "—"}</p>
+                      <p className="text-xs text-white/35">{user?.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Shipping address */}
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Shipping Address</p>
+                    <div className="bg-white/3 border border-white/6 px-4 py-3">
+                      <p className="text-sm text-white/60 leading-relaxed whitespace-pre-line">{activeOrder.shipping_address}</p>
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  {activeOrder.order_items && activeOrder.order_items.length > 0 && (
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Items ({activeOrder.order_items.length})</p>
+                      <div className="border border-white/6 divide-y divide-white/5">
+                        {activeOrder.order_items.map((item) => (
+                          <div key={item.id} className="flex items-center justify-between px-4 py-3">
+                            <div>
+                              <p className="text-sm text-white/70">{item.name}</p>
+                              <p className="text-xs text-white/30 mt-0.5">{item.size} · ×{item.quantity}</p>
+                            </div>
+                            <p className="text-sm text-white/50">€{(item.price * item.quantity).toFixed(2)}</p>
+                          </div>
+                        ))}
+                        <div className="flex items-center justify-between px-4 py-3 bg-white/3">
+                          <p className="text-xs uppercase tracking-[0.35em] text-white/40">Total</p>
+                          <p className="text-sm font-semibold text-white">€{activeOrder.total_price.toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Cancellation reason */}
+                  {activeOrder.status === "cancelled" && activeOrder.cancellation_reason && (
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Cancellation Reason</p>
+                      <p className="text-xs text-red-400/50 italic leading-relaxed">{activeOrder.cancellation_reason}</p>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-3 pt-2 border-t border-white/8">
+                    {activeOrder.status === "shipped" && (
+                      <button
+                        onClick={() => { confirmDelivery(activeOrder.id); setActiveOrder((o) => o ? { ...o, status: "delivered" as any } : o); }}
+                        disabled={confirmingDelivery === activeOrder.id}
+                        className="text-[9px] uppercase tracking-[0.3em] text-teal-400/70 hover:text-teal-400 border border-teal-400/20 hover:border-teal-400/50 px-3 py-2 transition-colors disabled:opacity-40"
+                      >
+                        {confirmingDelivery === activeOrder.id ? "..." : "Confirm Delivery"}
+                      </button>
+                    )}
+                    {(activeOrder.status === "pending" || activeOrder.status === "processing") && (
+                      <button
+                        onClick={() => { setActiveOrder(null); setTimeout(() => { setCancelOrderId(activeOrder.id); setCancelReason(""); setCancelError(null); }, 200); }}
+                        className="text-[9px] uppercase tracking-[0.3em] text-red-400/50 hover:text-red-400 border border-red-400/15 hover:border-red-400/40 px-3 py-2 transition-colors"
+                      >
+                        {t.account.cancel}
+                      </button>
+                    )}
+                    {activeOrder.status === "cancelled" && (
+                      <button
+                        onClick={() => { deleteOrder(activeOrder.id); setActiveOrder(null); }}
+                        disabled={deletingOrderId === activeOrder.id}
+                        className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-red-400/70 border border-white/10 hover:border-red-400/30 px-3 py-2 transition-colors disabled:opacity-40"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        {deletingOrderId === activeOrder.id ? t.account.deletingOrder : t.account.deleteOrder}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setActiveOrder(null)}
+                      className="ml-auto text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-white/60 px-3 py-2 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             </div>
