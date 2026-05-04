@@ -34,7 +34,7 @@ export function Footer() {
               <a href="https://www.instagram.com/xfclothing2026/" target="_blank" rel="noopener noreferrer" data-testid="link-instagram" className="hover:text-foreground transition-colors">
                 <SiInstagram className="w-5 h-5" />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" data-testid="link-tiktok" className="hover:text-foreground transition-colors">
+              <a href="https://www.tiktok.com/@xf.clothing" target="_blank" rel="noopener noreferrer" data-testid="link-tiktok" className="hover:text-foreground transition-colors">
                 <SiTiktok className="w-5 h-5" />
               </a>
             </div>

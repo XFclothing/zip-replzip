@@ -136,9 +136,9 @@ export default function Contact() {
                   <SiInstagram className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                   <span className="uppercase tracking-widest text-sm">@xfclothing2026</span>
                 </a>
-                <a href="#" className="flex items-center gap-3 hover:text-primary transition-colors group">
+                <a href="https://www.tiktok.com/@xf.clothing" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-primary transition-colors group">
                   <SiTiktok className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <span className="uppercase tracking-widest text-sm">@xf.official</span>
+                  <span className="uppercase tracking-widest text-sm">@xf.clothing</span>
                 </a>
               </div>
             </div>
