@@ -204,6 +204,14 @@ router.post("/email/notify-subscribers", async (req, res) => {
       )
     );
 
+    await fetch(`${supabaseUrl}/rest/v1/notify_emails?id=gte.0`, {
+      method: "DELETE",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
+
     res.json({ ok: true, sent: emails.length });
   } catch (err: any) {
     console.error("Notify subscribers error:", err);
