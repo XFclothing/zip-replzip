@@ -61,6 +61,7 @@ export default function ProductDetail() {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
   const [added, setAdded] = useState(false);
+  const [sizeError, setSizeError] = useState(false);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" });
 
@@ -105,9 +106,10 @@ export default function ProductDetail() {
 
   function handleAddToCart() {
     if (product!.sizes.length > 0 && !selectedSize) {
-      alert(t.product.selectSize);
+      setSizeError(true);
       return;
     }
+    setSizeError(false);
     addToCart({
       productId: product!.id + (activeColor ? `-${activeColor.name.toLowerCase()}` : ""),
       name: cartName,
@@ -280,7 +282,7 @@ export default function ProductDetail() {
                       {product.sizes.map((size) => (
                         <button
                           key={size}
-                          onClick={() => setSelectedSize(size)}
+                          onClick={() => { setSelectedSize(size); setSizeError(false); }}
                           className={`h-12 w-12 md:w-16 border flex items-center justify-center text-sm uppercase tracking-wider transition-all
                             ${selectedSize === size
                               ? "bg-primary text-primary-foreground border-primary"
@@ -294,6 +296,15 @@ export default function ProductDetail() {
                   </div>
                 )}
               </div>
+
+              {sizeError && (
+                <div className="flex items-center gap-3 border border-foreground/20 bg-foreground/5 px-4 py-3">
+                  <span className="text-foreground/50 text-lg leading-none">↑</span>
+                  <p className="text-xs uppercase tracking-[0.3em] text-foreground/70">
+                    {lang === "de" ? "Bitte Größe auswählen" : "Please select a size"}
+                  </p>
+                </div>
+              )}
 
               <Button
                 size="lg"
