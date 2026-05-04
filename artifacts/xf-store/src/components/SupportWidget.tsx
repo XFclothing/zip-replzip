@@ -308,10 +308,9 @@ export function SupportWidget() {
       {/* Trigger Button */}
       <motion.button
         onClick={() => setOpen((v) => !v)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="relative w-13 h-13 bg-white text-black flex items-center justify-center shadow-lg hover:bg-white/90 transition-colors"
-        style={{ width: 52, height: 52 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="relative text-white/50 hover:text-white transition-colors"
         aria-label="Support"
       >
         <AnimatePresence mode="wait">
