@@ -31,7 +31,7 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-foreground/40">{t.footer.social}</h4>
             <div className="flex gap-5 text-foreground/30">
-              <a href="#" target="_blank" rel="noopener noreferrer" data-testid="link-instagram" className="hover:text-foreground transition-colors">
+              <a href="https://www.instagram.com/xfclothing2026/" target="_blank" rel="noopener noreferrer" data-testid="link-instagram" className="hover:text-foreground transition-colors">
                 <SiInstagram className="w-5 h-5" />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" data-testid="link-tiktok" className="hover:text-foreground transition-colors">

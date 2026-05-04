@@ -132,9 +132,9 @@ export default function Contact() {
             <div>
               <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Find Us</h3>
               <div className="flex gap-8">
-                <a href="#" className="flex items-center gap-3 hover:text-primary transition-colors group">
+                <a href="https://www.instagram.com/xfclothing2026/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-primary transition-colors group">
                   <SiInstagram className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <span className="uppercase tracking-widest text-sm">@xf.official</span>
+                  <span className="uppercase tracking-widest text-sm">@xfclothing2026</span>
                 </a>
                 <a href="#" className="flex items-center gap-3 hover:text-primary transition-colors group">
                   <SiTiktok className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
