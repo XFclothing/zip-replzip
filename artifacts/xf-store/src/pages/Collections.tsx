@@ -12,7 +12,7 @@ export default function Collections() {
             transition={{ duration: 0.6 }}
             className="text-5xl md:text-8xl font-bold uppercase tracking-widest mb-6"
           >
-            Unseen Drop
+            FX Drop
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
