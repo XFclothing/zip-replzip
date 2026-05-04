@@ -89,19 +89,72 @@ router.post("/email/order", async (req, res) => {
   const transport = createTransport();
 
   try {
+    const itemsHtml = (items || [])
+      .map(
+        (i: any) => `
+        <tr>
+          <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.75);font-size:13px;">${i.name}</td>
+          <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:12px;text-align:center;">${i.size}</td>
+          <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:12px;text-align:center;">×${i.quantity}</td>
+          <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:#fff;font-size:13px;text-align:right;">€${(i.price * i.quantity).toFixed(2)}</td>
+        </tr>`
+      )
+      .join("");
+
+    const customerHtml = `
+<div style="background:#000;color:#fff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;padding:0;margin:0;">
+  <div style="max-width:520px;margin:0 auto;padding:56px 40px;">
+    <p style="font-size:10px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin:0 0 48px;">XF — Order Confirmed</p>
+
+    <h1 style="font-size:28px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#fff;margin:0 0 8px;">Thank You${customerName ? ", " + customerName : ""}.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,0.45);margin:0 0 40px;line-height:1.7;">Your order has been received. We'll be in touch to confirm shipment.</p>
+
+    <div style="border:1px solid rgba(255,255,255,0.08);padding:24px;margin-bottom:24px;">
+      <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin:0 0 16px;">Order Details</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);text-align:left;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">Item</th>
+            <th style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);text-align:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">Size</th>
+            <th style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);text-align:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">Qty</th>
+            <th style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);text-align:right;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">Price</th>
+          </tr>
+        </thead>
+        <tbody>${itemsHtml}</tbody>
+      </table>
+      <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+        <span style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Total</span>
+        <span style="font-size:18px;font-weight:700;color:#fff;">€${Number(total).toFixed(2)}</span>
+      </div>
+    </div>
+
+    <div style="border:1px solid rgba(255,255,255,0.08);padding:24px;margin-bottom:40px;">
+      <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin:0 0 8px;">Shipping To</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin:0;line-height:1.6;">${shippingAddress}</p>
+    </div>
+
+    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.15);margin:0 0 4px;">Order Reference</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.25);margin:0 0 48px;font-family:monospace;">#${String(orderId).slice(0, 8).toUpperCase()}</p>
+
+    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.15);margin:0;">XF by Xavier &amp; Fynn</p>
+  </div>
+</div>`;
+
+    const staffText = `New order!\n\nCustomer: ${customerName} (${customerEmail})\nOrder #${orderId}\nTotal: €${Number(total).toFixed(2)}\nShipping: ${shippingAddress}\n\nItems:\n${itemsList}`;
+
     await Promise.all([
       transport.sendMail({
         from: FROM,
         to: customerEmail,
         subject: "Order Confirmed — XF Store",
-        text: `Hey ${customerName},\n\nyour order has been received!\n\nOrder #${orderId}\nTotal: €${Number(total).toFixed(2)}\nShipping address: ${shippingAddress}\n\nItems:\n${itemsList}\n\nThank you for your purchase!\n— XF Store`,
+        html: customerHtml,
       }),
       ...allStaff.map((email) =>
         transport.sendMail({
           from: FROM,
           to: email,
           subject: `New Order — ${customerName}`,
-          text: `A new order has been placed!\n\nCustomer: ${customerName} (${customerEmail})\nOrder #${orderId}\nTotal: €${Number(total).toFixed(2)}\nShipping address: ${shippingAddress}\n\nItems:\n${itemsList}`,
+          text: staffText,
         })
       ),
     ]);
