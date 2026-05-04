@@ -12,8 +12,8 @@ const FROM = `XF Store <${GMX_EMAIL}>`;
 function createTransport() {
   return nodemailer.createTransport({
     host: "mail.gmx.net",
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: { user: GMX_EMAIL, pass: GMX_PASSWORD },
   });
 }
