@@ -27,7 +27,7 @@ const DEFAULT_PERMS = { view_orders: true, manage_orders: false, manage_tickets:
 export default function Founder() {
   const { role, loading } = useAuth();
   const [, navigate] = useLocation();
-  const [tab, setTab] = useState<"workers" | "orders" | "delivered" | "tickets">("workers");
+  const [tab, setTab] = useState<"workers" | "orders" | "delivered" | "old_orders" | "tickets">("workers");
 
   // Workers
   const [workers, setWorkers] = useState<Admin[]>([]);
@@ -170,13 +170,14 @@ export default function Founder() {
     setActiveTicket((prev) => prev ? { ...prev, status: status as Ticket["status"] } : prev);
   }
 
-  const activeOrders = orders.filter((o) => o.status !== "delivered");
-  const deliveredOrders = orders.filter((o) => o.status === "delivered");
+  const activeOrders = orders.filter((o) => o.status !== "delivered" && o.status !== "old_orders" && o.status !== "completed");
+  const deliveredOrders = orders.filter((o) => o.status === "delivered" || o.status === "completed");
+  const oldOrders = orders.filter((o) => o.status === "old_orders");
   const filteredOrders = filterStatus === "all" ? activeOrders : activeOrders.filter((o) => o.status === filterStatus);
 
   async function confirmDelivery(orderId: string) {
-    await supabase.from("orders").update({ status: "completed" }).eq("id", orderId);
-    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "completed" } : o));
+    await supabase.from("orders").update({ status: "old_orders" }).eq("id", orderId);
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "old_orders" } : o));
   }
 
   if (loading) return (
@@ -203,7 +204,7 @@ export default function Founder() {
 
           {/* Tabs */}
           <div className="flex border-b border-white/10 mb-10 flex-wrap">
-            {(["workers", "orders", "delivered", "tickets"] as const).map((t) => (
+            {(["workers", "orders", "delivered", "old_orders", "tickets"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -214,6 +215,7 @@ export default function Founder() {
                 {t === "workers" && <>Workers <span className="text-white/30">({workers.length})</span></>}
                 {t === "orders" && <>Orders <span className="text-white/30">({activeOrders.length})</span></>}
                 {t === "delivered" && <>Delivered <span className="text-teal-400/50">({deliveredOrders.length})</span></>}
+                {t === "old_orders" && <>Old Orders <span className="text-white/25">({oldOrders.length})</span></>}
                 {t === "tickets" && <>Tickets <span className="text-white/30">({tickets.filter(tk => tk.status === "open").length})</span></>}
               </button>
             ))}
@@ -388,6 +390,46 @@ export default function Founder() {
                             Confirm &amp; Complete
                           </button>
                         </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Old Orders Tab */}
+          {tab === "old_orders" && (
+            <div>
+              <p className="text-xs text-white/30 uppercase tracking-widest mb-6">{oldOrders.length} old orders</p>
+              {ordersLoading ? (
+                <div className="flex justify-center py-16"><div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" /></div>
+              ) : oldOrders.length === 0 ? (
+                <p className="text-white/25 text-xs uppercase tracking-widest py-12 text-center">No old orders</p>
+              ) : (
+                <div className="space-y-4">
+                  {oldOrders.map((order) => (
+                    <div key={order.id} className="border border-white/5 p-6 opacity-60">
+                      <div className="flex flex-col lg:flex-row lg:items-start gap-6">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-4 mb-2 flex-wrap">
+                            <span className="text-white/50 font-semibold text-sm">${order.total_price.toFixed(2)}</span>
+                            <span className="text-white/20 text-xs">{new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
+                          </div>
+                          <p className="text-xs text-white/25 tracking-wide mb-3">{order.shipping_address}</p>
+                          {order.order_items && (
+                            <div className="space-y-1">
+                              {order.order_items.map((item) => (
+                                <p key={item.id} className="text-xs text-white/30">
+                                  {item.name} · {item.size} · ×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[10px] uppercase tracking-[0.35em] px-3 py-1.5 border text-white/25 border-white/10 flex-shrink-0">
+                          Old Order
+                        </span>
                       </div>
                     </div>
                   ))}

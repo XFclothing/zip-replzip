@@ -20,8 +20,19 @@ const STATUS_COLORS: Record<string, string> = {
   processing: "text-blue-400/80",
   shipped: "text-purple-400/80",
   delivered: "text-teal-400/80",
-  completed: "text-green-400/80",
+  completed: "text-teal-400/80",
+  old_orders: "text-white/30",
   cancelled: "text-red-400/70",
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  pending: "pending",
+  processing: "processing",
+  shipped: "shipped",
+  delivered: "delivered",
+  completed: "delivered",
+  old_orders: "old order",
+  cancelled: "cancelled",
 };
 
 export default function Account() {
@@ -478,7 +489,7 @@ export default function Account() {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className={`text-xs uppercase tracking-widest font-medium ${STATUS_COLORS[order.status] || "text-white/50"}`}>
-                            {order.status}
+                            {STATUS_LABEL[order.status] || order.status}
                           </span>
                           {order.status === "shipped" && (
                             <button
