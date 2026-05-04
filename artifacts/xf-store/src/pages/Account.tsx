@@ -19,6 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending: "text-yellow-400/80",
   processing: "text-blue-400/80",
   shipped: "text-purple-400/80",
+  delivered: "text-teal-400/80",
   completed: "text-green-400/80",
   cancelled: "text-red-400/70",
 };
@@ -60,6 +61,7 @@ export default function Account() {
   const [cancelling, setCancelling] = useState(false);
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+  const [confirmingDelivery, setConfirmingDelivery] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate("/login");
@@ -218,6 +220,13 @@ export default function Account() {
     setShowDisable(false);
     setDisableCode("");
     setEmailDisableCodeSent(false);
+  }
+
+  async function confirmDelivery(orderId: string) {
+    setConfirmingDelivery(orderId);
+    await supabase.from("orders").update({ status: "delivered" }).eq("id", orderId);
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "delivered" } : o));
+    setConfirmingDelivery(null);
   }
 
   async function cancelOrder() {
@@ -471,6 +480,15 @@ export default function Account() {
                           <span className={`text-xs uppercase tracking-widest font-medium ${STATUS_COLORS[order.status] || "text-white/50"}`}>
                             {order.status}
                           </span>
+                          {order.status === "shipped" && (
+                            <button
+                              onClick={() => confirmDelivery(order.id)}
+                              disabled={confirmingDelivery === order.id}
+                              className="text-[9px] uppercase tracking-[0.3em] text-teal-400/70 hover:text-teal-400 border border-teal-400/20 hover:border-teal-400/50 px-2 py-1 transition-colors disabled:opacity-40"
+                            >
+                              {confirmingDelivery === order.id ? "..." : "Confirm Delivery"}
+                            </button>
+                          )}
                           {(order.status === "pending" || order.status === "processing") && (
                             <button
                               onClick={() => { setCancelOrderId(order.id); setCancelReason(""); setCancelError(null); }}

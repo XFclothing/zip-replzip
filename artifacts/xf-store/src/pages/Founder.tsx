@@ -8,10 +8,11 @@ import { supabase, Order, Ticket, TicketMessage, Admin } from "@/lib/supabase";
 const STATUSES = ["pending", "processing", "shipped", "completed"] as const;
 type OrderStatus = (typeof STATUSES)[number];
 
-const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
+const ORDER_STATUS_COLORS: Record<string, string> = {
   pending: "text-yellow-400/80 border-yellow-400/30",
   processing: "text-blue-400/80 border-blue-400/30",
   shipped: "text-purple-400/80 border-purple-400/30",
+  delivered: "text-teal-400/80 border-teal-400/30",
   completed: "text-green-400/80 border-green-400/30",
 };
 
@@ -26,7 +27,7 @@ const DEFAULT_PERMS = { view_orders: true, manage_orders: false, manage_tickets:
 export default function Founder() {
   const { role, loading } = useAuth();
   const [, navigate] = useLocation();
-  const [tab, setTab] = useState<"workers" | "orders" | "tickets">("workers");
+  const [tab, setTab] = useState<"workers" | "orders" | "delivered" | "tickets">("workers");
 
   // Workers
   const [workers, setWorkers] = useState<Admin[]>([]);
@@ -169,7 +170,14 @@ export default function Founder() {
     setActiveTicket((prev) => prev ? { ...prev, status: status as Ticket["status"] } : prev);
   }
 
-  const filteredOrders = filterStatus === "all" ? orders : orders.filter((o) => o.status === filterStatus);
+  const activeOrders = orders.filter((o) => o.status !== "delivered");
+  const deliveredOrders = orders.filter((o) => o.status === "delivered");
+  const filteredOrders = filterStatus === "all" ? activeOrders : activeOrders.filter((o) => o.status === filterStatus);
+
+  async function confirmDelivery(orderId: string) {
+    await supabase.from("orders").update({ status: "completed" }).eq("id", orderId);
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "completed" } : o));
+  }
 
   if (loading) return (
     <div className="min-h-screen bg-black flex items-center justify-center">
@@ -194,8 +202,8 @@ export default function Founder() {
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-white/10 mb-10">
-            {(["workers", "orders", "tickets"] as const).map((t) => (
+          <div className="flex border-b border-white/10 mb-10 flex-wrap">
+            {(["workers", "orders", "delivered", "tickets"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -203,10 +211,10 @@ export default function Founder() {
                   tab === t ? "border-white text-white" : "border-transparent text-white/30 hover:text-white/60"
                 }`}
               >
-                {t}
-                {t === "workers" && <span className="ml-2 text-white/30">({workers.length})</span>}
-                {t === "orders" && <span className="ml-2 text-white/30">({orders.length})</span>}
-                {t === "tickets" && <span className="ml-2 text-white/30">({tickets.filter(t => t.status === "open").length})</span>}
+                {t === "workers" && <>Workers <span className="text-white/30">({workers.length})</span></>}
+                {t === "orders" && <>Orders <span className="text-white/30">({activeOrders.length})</span></>}
+                {t === "delivered" && <>Delivered <span className="text-teal-400/50">({deliveredOrders.length})</span></>}
+                {t === "tickets" && <>Tickets <span className="text-white/30">({tickets.filter(tk => tk.status === "open").length})</span></>}
               </button>
             ))}
           </div>
@@ -331,6 +339,54 @@ export default function Founder() {
                           >
                             {STATUSES.map((s) => <option key={s} value={s} className="bg-black">{s}</option>)}
                           </select>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Delivered Orders Tab */}
+          {tab === "delivered" && (
+            <div>
+              <p className="text-xs text-white/30 uppercase tracking-widest mb-6">{deliveredOrders.length} delivered orders</p>
+              {ordersLoading ? (
+                <div className="flex justify-center py-16"><div className="w-5 h-5 border border-white/20 border-t-white/60 rounded-full animate-spin" /></div>
+              ) : deliveredOrders.length === 0 ? (
+                <p className="text-white/25 text-xs uppercase tracking-widest py-12 text-center">No delivered orders</p>
+              ) : (
+                <div className="space-y-4">
+                  {deliveredOrders.map((order) => (
+                    <div key={order.id} className="border border-teal-400/15 p-6">
+                      <div className="flex flex-col lg:flex-row lg:items-start gap-6">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-4 mb-2 flex-wrap">
+                            <span className="text-white font-semibold text-sm">${order.total_price.toFixed(2)}</span>
+                            <span className="text-white/25 text-xs">{new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                          </div>
+                          <p className="text-xs text-white/35 tracking-wide mb-3">{order.shipping_address}</p>
+                          {order.order_items && (
+                            <div className="space-y-1">
+                              {order.order_items.map((item) => (
+                                <p key={item.id} className="text-xs text-white/45">
+                                  {item.name} · {item.size} · ×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-shrink-0 flex flex-col gap-2 items-end">
+                          <span className="text-[10px] uppercase tracking-[0.35em] px-3 py-1.5 border text-teal-400/80 border-teal-400/30 text-center">
+                            Delivered by customer
+                          </span>
+                          <button
+                            onClick={() => confirmDelivery(order.id)}
+                            className="text-[10px] uppercase tracking-[0.35em] px-4 py-2 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors border border-white/10"
+                          >
+                            Confirm &amp; Complete
+                          </button>
                         </div>
                       </div>
                     </div>
