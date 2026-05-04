@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase, Order, Ticket, TicketMessage } from "@/lib/supabase";
 
-const STATUSES = ["pending", "processing", "shipped", "completed"] as const;
+const STATUSES = ["pending", "processing", "shipped"] as const;
 type OrderStatus = (typeof STATUSES)[number];
 
 const ORDER_STATUS_COLORS: Record<string, string> = {
