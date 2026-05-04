@@ -10,101 +10,82 @@ function getStripe() {
   return new Stripe(key, { apiVersion: "2025-04-30.basil" });
 }
 
-function getBaseUrl() {
-  const domains = process.env.REPLIT_DOMAINS;
-  if (domains) return `https://${domains.split(",")[0]}`;
-  return "http://localhost:3000";
-}
-
-// POST /api/stripe/checkout — create a Stripe Checkout session
-router.post("/stripe/checkout", async (req, res): Promise<void> => {
+// POST /api/stripe/payment-intent — create PaymentIntent for embedded payment
+router.post("/stripe/payment-intent", async (req, res): Promise<void> => {
   try {
     const stripe = getStripe();
-    const { items, shippingAddress, email, customerName } = req.body;
+    const { items, shippingAddress, email, customerName, userId } = req.body;
 
     if (!items || items.length === 0) {
       res.status(400).json({ error: "Cart is empty" });
       return;
     }
 
-    const base = getBaseUrl();
+    const totalAmount = items.reduce(
+      (sum: number, item: any) => sum + Math.round(item.price * 100) * item.quantity,
+      0
+    );
 
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: "eur",
-        product_data: {
-          name: item.name,
-          ...(item.image ? { images: [] } : {}),
-          metadata: { size: item.size },
-        },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: item.quantity,
-    }));
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "klarna", "paypal"],
-      line_items: lineItems,
-      mode: "payment",
-      customer_email: email || undefined,
-      billing_address_collection: "auto",
-      success_url: `${base}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${base}/checkout`,
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount,
+      currency: "eur",
+      automatic_payment_methods: { enabled: true },
+      receipt_email: email || undefined,
       metadata: {
         shippingAddress: shippingAddress || "",
         customerName: customerName || "",
-        userId: req.session?.userId || "",
+        userId: userId || "",
+        itemsSummary: items.map((i: any) => `${i.name} x${i.quantity}`).join(", "),
       },
     });
 
-    res.json({ url: session.url });
+    res.json({ clientSecret: paymentIntent.client_secret });
   } catch (err: any) {
-    console.error("Stripe checkout error:", err);
-    res.status(500).json({ error: err.message || "Failed to create checkout session" });
+    console.error("Stripe payment-intent error:", err);
+    res.status(500).json({ error: err.message || "Failed to create payment intent" });
   }
 });
 
-// POST /api/stripe/verify — verify completed session and save order
-router.post("/stripe/verify", async (req, res): Promise<void> => {
+// POST /api/stripe/confirm-order — save order after successful payment
+router.post("/stripe/confirm-order", async (req, res): Promise<void> => {
   try {
     const stripe = getStripe();
-    const { sessionId } = req.body;
+    const { paymentIntentId } = req.body;
 
-    if (!sessionId) {
-      res.status(400).json({ error: "Missing sessionId" });
+    if (!paymentIntentId) {
+      res.status(400).json({ error: "Missing paymentIntentId" });
       return;
     }
 
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items"],
-    });
+    const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    if (session.payment_status !== "paid") {
+    if (intent.status !== "succeeded") {
       res.status(402).json({ error: "Payment not completed" });
       return;
     }
 
-    const items = session.line_items?.data.map((li) => ({
-      name: li.description || "",
-      price: (li.amount_total || 0) / 100 / (li.quantity || 1),
-      quantity: li.quantity || 1,
-      size: "",
-    })) || [];
+    const meta = intent.metadata || {};
+    let items: any[] = [];
+    try {
+      items = JSON.parse(meta.items || "[]");
+    } catch {
+      items = [];
+    }
 
     const [order] = await db.insert(ordersTable).values({
-      userId: session.metadata?.userId || null,
-      customerName: session.metadata?.customerName || session.customer_details?.name || "",
-      email: session.customer_email || "",
-      shippingAddress: session.metadata?.shippingAddress || "",
+      userId: meta.userId || null,
+      customerName: meta.customerName || "",
+      email: typeof intent.receipt_email === "string" ? intent.receipt_email : "",
+      shippingAddress: meta.shippingAddress || "",
       items,
-      totalPrice: (session.amount_total || 0) / 100,
+      totalPrice: intent.amount / 100,
       status: "paid",
     }).returning();
 
     res.json({ order: { ...order, createdAt: order.createdAt.toISOString() } });
   } catch (err: any) {
-    console.error("Stripe verify error:", err);
-    res.status(500).json({ error: err.message || "Failed to verify session" });
+    console.error("Stripe confirm-order error:", err);
+    res.status(500).json({ error: err.message || "Failed to confirm order" });
   }
 });
 
