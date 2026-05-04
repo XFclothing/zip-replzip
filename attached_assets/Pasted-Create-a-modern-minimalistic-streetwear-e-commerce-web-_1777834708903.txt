@@ -1,0 +1,143 @@
+Create a modern, minimalistic streetwear e-commerce web app for a brand called "XF".
+
+Use Supabase as backend.
+
+---
+
+DATABASE STRUCTURE (IMPORTANT):
+
+Use the following SQL schema:
+
+-- UUID Extension
+create extension if not exists "pgcrypto";
+
+create table users (
+id uuid primary key default gen_random_uuid(),
+name text,
+email text unique,
+password text,
+role text default 'user',
+shipping_address text,
+created_at timestamp default now()
+);
+
+create table admins (
+id uuid primary key default gen_random_uuid(),
+name text,
+email text unique,
+role text default 'worker',
+permissions jsonb default '{}'::jsonb
+);
+
+create table products (
+id uuid primary key default gen_random_uuid(),
+name text,
+price numeric,
+category text,
+description text,
+image_url text,
+stock integer default 0
+);
+
+create table orders (
+id uuid primary key default gen_random_uuid(),
+user_id uuid references users(id),
+total_price numeric,
+status text default 'pending',
+shipping_address text,
+created_at timestamp default now()
+);
+
+create table order_items (
+id uuid primary key default gen_random_uuid(),
+order_id uuid references orders(id),
+product_id uuid references products(id),
+quantity integer,
+price numeric
+);
+
+create table tickets (
+id uuid primary key default gen_random_uuid(),
+user_id uuid references users(id),
+subject text,
+status text default 'open',
+created_at timestamp default now()
+);
+
+create table ticket_messages (
+id uuid primary key default gen_random_uuid(),
+ticket_id uuid references tickets(id),
+sender_role text,
+message text,
+created_at timestamp default now()
+);
+
+Disable Row Level Security (RLS) for development.
+
+---
+
+ROLE SYSTEM:
+
+* If email = [xfclothing@gmail.com](mailto:xfclothing@gmail.com) or [xaviermalucha@gmail.com](mailto:xaviermalucha@gmail.com)
+  → role = founder
+
+* If email exists in "admins"
+  → role = worker
+
+* Otherwise → role = user
+
+---
+
+FOUNDER PANEL:
+
+* Add worker:
+  Insert into "admins" table:
+  name
+  email
+  role = worker
+  permissions = {}
+
+* Remove worker
+
+* Manage permissions
+
+---
+
+WORKER PANEL:
+
+* View orders
+* Update order status
+* Manage support tickets
+
+---
+
+SUPPORT SYSTEM:
+
+* Users can create tickets
+* Workers can reply
+* Store messages in ticket_messages
+
+---
+
+CHECKOUT FLOW:
+
+* If not logged in → force signup/login
+* If logged in → autofill name/email
+* Only require shipping address
+
+---
+
+IMPORTANT:
+
+* Do NOT delete orders
+* Only update status
+* Store all data in Supabase
+* Use the exact schema above
+
+---
+
+STYLE:
+
+* Dark, minimal, premium streetwear design
+* Clean UI
+* Smooth animations

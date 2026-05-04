@@ -1,0 +1,180 @@
+Create a modern, minimalistic streetwear e-commerce web app for a brand called "XF", founded by Xavier and Fynn.
+
+TECH STACK:
+
+* Frontend: React (or similar)
+* Backend & Database: Supabase
+* Authentication: Supabase Auth (email + password)
+
+---
+
+DATABASE:
+
+Use Supabase with the following tables:
+
+* users
+* admins (workers)
+* products
+* orders
+* order_items
+* tickets
+* ticket_messages
+
+DO NOT store plain passwords in custom tables.
+Use Supabase Auth for authentication.
+
+---
+
+SECURITY (VERY IMPORTANT):
+
+* ENABLE Row Level Security (RLS) on all tables
+* Use policies to restrict access:
+
+USERS:
+
+* Users can only read/update their own data
+
+ORDERS:
+
+* Users can only see their own orders
+* Workers can see all orders
+* Founders can see all orders
+
+TICKETS:
+
+* Users can only see their own tickets
+* Workers and founders can see all tickets
+
+ADMINS:
+
+* Only founders can manage admins
+
+---
+
+ROLE SYSTEM:
+
+Define roles:
+
+* user
+* worker
+* founder
+
+FOUNDERS:
+
+* [xfclothing@gmail.com](mailto:xfclothing@gmail.com)
+* [xaviermalucha@gmail.com](mailto:xaviermalucha@gmail.com)
+
+When a user logs in:
+
+* If email matches founder → role = founder
+* If email exists in admins table → role = worker
+* Else → role = user
+
+---
+
+FOUNDER PANEL (HIGH ACCESS):
+
+* Only accessible to founder role
+
+FEATURES:
+
+* View all users
+* View all orders
+* View all tickets
+* Add worker:
+
+  * Insert into admins table (name, email)
+* Remove worker
+* Set permissions (JSON)
+
+---
+
+WORKER PANEL:
+
+* Only accessible if role = worker
+
+FEATURES:
+
+* View all orders
+* Update order status:
+  pending → processing → shipped → completed
+* View support tickets
+* Reply to tickets
+
+---
+
+SUPPORT SYSTEM:
+
+Users can:
+
+* Create ticket
+* Send message
+
+Workers can:
+
+* Reply to tickets
+* Change ticket status (open, answered, closed)
+
+---
+
+CHECKOUT FLOW:
+
+* If user not logged in:
+  → require signup/login
+
+* If logged in:
+  → autofill name + email
+  → only ask for shipping address
+
+* Save:
+
+  * orders
+  * order_items
+
+---
+
+SHOP:
+
+Products:
+
+* Hoodies (oversized)
+* T-Shirts (relaxed, oversized)
+* Jogging pants (baggy)
+
+NO:
+
+* cargo
+* hats
+* jeans
+
+---
+
+IMPORTANT SECURITY RULES:
+
+* NEVER trust frontend for role checks
+
+* Always validate roles via Supabase (backend)
+
+* Do NOT delete orders or tickets
+
+* Only update status
+
+---
+
+STYLE:
+
+* Dark, minimal, premium streetwear
+* Clean UI
+* Smooth animations
+
+---
+
+GOAL:
+
+Build a fully working, secure e-commerce system with:
+
+* authentication
+* role-based access (user, worker, founder)
+* admin panels
+* support system
+* Supabase backend with RLS
