@@ -27,7 +27,7 @@ const DEFAULT_PERMS = { view_orders: true, manage_orders: false, manage_tickets:
 export default function Founder() {
   const { role, loading } = useAuth();
   const [, navigate] = useLocation();
-  const [tab, setTab] = useState<"workers" | "orders" | "delivered" | "old_orders" | "tickets">("workers");
+  const [tab, setTab] = useState<"workers" | "orders" | "delivered" | "old_orders" | "tickets" | "notify">("workers");
 
   // Workers
   const [workers, setWorkers] = useState<Admin[]>([]);
@@ -55,14 +55,51 @@ export default function Founder() {
   const [reply, setReply] = useState("");
   const [replying, setReplying] = useState(false);
 
+  // Notify
+  const [notifySubject, setNotifySubject] = useState("");
+  const [notifyMessage, setNotifyMessage] = useState("");
+  const [notifySending, setNotifySending] = useState(false);
+  const [notifyResult, setNotifyResult] = useState<{ ok: boolean; sent?: number; error?: string } | null>(null);
+  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
+
   useEffect(() => {
     if (!loading && role !== "founder") navigate("/login");
     if (!loading && role === "founder") {
       fetchWorkers();
       fetchOrders();
       fetchTickets();
+      fetchSubscriberCount();
     }
   }, [role, loading]);
+
+  async function fetchSubscriberCount() {
+    const { count } = await supabase.from("notify_emails").select("*", { count: "exact", head: true });
+    setSubscriberCount(count ?? 0);
+  }
+
+  async function sendNotification() {
+    if (!notifySubject.trim() || !notifyMessage.trim()) return;
+    setNotifySending(true);
+    setNotifyResult(null);
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${baseUrl}/api/email/notify-subscribers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject: notifySubject.trim(), message: notifyMessage.trim() }),
+      });
+      const data = await res.json();
+      setNotifyResult(data);
+      if (data.ok) {
+        setNotifySubject("");
+        setNotifyMessage("");
+        fetchSubscriberCount();
+      }
+    } catch (err: any) {
+      setNotifyResult({ ok: false, error: err.message });
+    }
+    setNotifySending(false);
+  }
 
   async function fetchWorkers() {
     setWorkersLoading(true);
@@ -205,7 +242,7 @@ export default function Founder() {
 
           {/* Tabs */}
           <div className="flex border-b border-foreground/10 mb-10 flex-wrap">
-            {(["workers", "orders", "delivered", "old_orders", "tickets"] as const).map((t) => (
+            {(["workers", "orders", "delivered", "old_orders", "tickets", "notify"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -218,6 +255,7 @@ export default function Founder() {
                 {t === "delivered" && <>Delivered <span className="text-teal-400/50">({deliveredOrders.length})</span></>}
                 {t === "old_orders" && <>Old Orders <span className="text-foreground/25">({oldOrders.length})</span></>}
                 {t === "tickets" && <>Tickets <span className="text-foreground/30">({tickets.filter(tk => tk.status === "open").length})</span></>}
+                {t === "notify" && <>Notify <span className="text-foreground/30">({subscriberCount ?? "…"})</span></>}
               </button>
             ))}
           </div>
@@ -432,6 +470,68 @@ export default function Founder() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Notify Tab */}
+          {tab === "notify" && (
+            <div className="max-w-xl">
+              <div className="mb-8">
+                <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/30 mb-1">Newsletter</p>
+                <p className="text-foreground/60 text-sm">
+                  {subscriberCount !== null ? (
+                    <><span className="text-foreground font-semibold">{subscriberCount}</span> subscriber{subscriberCount !== 1 ? "s" : ""} will receive this email.</>
+                  ) : "Loading subscribers…"}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2 block">Subject</label>
+                  <input
+                    type="text"
+                    value={notifySubject}
+                    onChange={(e) => setNotifySubject(e.target.value)}
+                    placeholder="Launch is here — Shop now"
+                    className="w-full bg-transparent border border-foreground/15 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/40 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-[0.4em] text-foreground/30 mb-2 block">Message</label>
+                  <textarea
+                    value={notifyMessage}
+                    onChange={(e) => setNotifyMessage(e.target.value)}
+                    placeholder="The wait is over. The XF Unseen Collection is officially live…"
+                    rows={6}
+                    className="w-full bg-transparent border border-foreground/15 text-foreground placeholder-foreground/20 px-4 py-3 text-sm outline-none focus:border-foreground/40 transition-colors resize-none"
+                  />
+                </div>
+
+                {notifyResult && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`px-4 py-3 text-xs uppercase tracking-[0.35em] border ${
+                      notifyResult.ok
+                        ? "border-green-400/30 text-green-400/80"
+                        : "border-red-400/30 text-red-400/80"
+                    }`}
+                  >
+                    {notifyResult.ok
+                      ? `Sent to ${notifyResult.sent} subscriber${notifyResult.sent !== 1 ? "s" : ""}`
+                      : `Error: ${notifyResult.error}`}
+                  </motion.div>
+                )}
+
+                <button
+                  onClick={sendNotification}
+                  disabled={notifySending || !notifySubject.trim() || !notifyMessage.trim() || subscriberCount === 0}
+                  className="w-full py-3.5 text-[11px] uppercase tracking-[0.5em] bg-foreground text-background hover:bg-foreground/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  {notifySending ? "Sending…" : `Send to ${subscriberCount ?? "…"} Subscribers`}
+                </button>
+              </div>
             </div>
           )}
 

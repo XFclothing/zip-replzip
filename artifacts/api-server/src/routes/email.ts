@@ -123,4 +123,54 @@ router.post("/email/ticket", async (req, res) => {
   }
 });
 
+router.post("/email/notify-subscribers", async (req, res) => {
+  const { subject, message } = req.body;
+  if (!subject || !message) {
+    res.status(400).json({ ok: false, error: "Subject and message required" });
+    return;
+  }
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    res.status(500).json({ ok: false, error: "Supabase config missing" });
+    return;
+  }
+
+  try {
+    const dbRes = await fetch(`${supabaseUrl}/rest/v1/notify_emails?select=email`, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
+    const rows: { email: string }[] = await dbRes.json();
+
+    if (!rows || rows.length === 0) {
+      res.json({ ok: true, sent: 0 });
+      return;
+    }
+
+    const emails = rows.map((r) => r.email);
+    const htmlBody = `<div style="background:#000;color:#fff;font-family:sans-serif;padding:48px 32px;max-width:480px;margin:0 auto;">
+  <h2 style="font-size:11px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:0 0 32px;">XF — Notification</h2>
+  <p style="font-size:15px;font-weight:700;color:#fff;margin:0 0 16px;letter-spacing:2px;text-transform:uppercase;">${subject}</p>
+  <p style="font-size:13px;color:rgba(255,255,255,0.6);margin:0 0 32px;line-height:1.8;white-space:pre-line;">${message}</p>
+  <p style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;margin:0;">XF by Xavier &amp; Fynn</p>
+</div>`;
+
+    await Promise.all(
+      emails.map((to) =>
+        resend.emails.send({ from: FROM, to, subject: `XF — ${subject}`, html: htmlBody })
+      )
+    );
+
+    res.json({ ok: true, sent: emails.length });
+  } catch (err: any) {
+    console.error("Notify subscribers error:", err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 export default router;

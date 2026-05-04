@@ -7,6 +7,7 @@ import xfLogoDark from "/logo-dark.png";
 import { featured } from "@/data/products";
 import { useLang } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
+import { supabase } from "@/lib/supabase";
 
 const TARGET_DATE = new Date("2026-09-01T00:00:00");
 
@@ -36,9 +37,11 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (!email) return;
+    await supabase.from("notify_emails").upsert({ email: email.toLowerCase().trim() }, { onConflict: "email" });
+    setSubmitted(true);
   };
 
   return (
