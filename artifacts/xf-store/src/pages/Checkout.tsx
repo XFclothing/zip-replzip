@@ -150,7 +150,7 @@ export default function Checkout() {
 
     if (data.order) {
       clearCart();
-      navigate("/checkout-success?method=pending");
+      navigate("/checkout/success?method=pending");
     } else {
       setError(data.error || "Failed to place order. Please try again.");
       setSubmitting(false);
