@@ -7,7 +7,7 @@ const GMX_EMAIL = process.env.GMX_EMAIL || "xfclothing@gmx.de";
 const GMX_PASSWORD = process.env.GMX_PASSWORD || "";
 
 const STAFF_EMAILS = ["xfclothing@gmx.de", "xaviermalucha@gmail.com"];
-const FROM = `XF Store <${GMX_EMAIL}>`;
+const FROM = `XF Clothing <${GMX_EMAIL}>`;
 
 function createTransport() {
   return nodemailer.createTransport({
@@ -187,7 +187,7 @@ router.post("/email/order", async (req, res) => {
       transport.sendMail({
         from: FROM,
         to: customerEmail,
-        subject: "Order Confirmed — XF Store",
+        subject: "Order Confirmed — XF Clothing",
         html: customerHtml,
       }),
       ...allStaff.map((email) =>
