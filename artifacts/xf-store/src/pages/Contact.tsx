@@ -146,7 +146,7 @@ export default function Contact() {
             <div>
               <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-6">Studio</h3>
               <p className="uppercase tracking-widest text-sm leading-loose">
-                Tokyo, Japan<br/>
+                Germany<br/>
                 Concept Space<br/>
                 By Appointment Only
               </p>
