@@ -922,7 +922,7 @@ export default function Account() {
                           type="text"
                           value={addrStreet}
                           onChange={(e) => setAddrStreet(e.target.value)}
-                          placeholder="Musterstraße"
+                          placeholder="123 Main St"
                           required
                           className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
                         />
