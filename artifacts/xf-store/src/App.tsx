@@ -21,6 +21,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Cart } from "@/components/Cart";
+import { SupportWidget } from "@/components/SupportWidget";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -33,6 +34,7 @@ function Router() {
     <div className="flex flex-col min-h-screen">
       <Nav />
       <Cart />
+      <SupportWidget />
       <main className="flex-grow">
         <Switch>
           <Route path="/" component={Home} />
