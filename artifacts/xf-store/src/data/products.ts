@@ -1,3 +1,122 @@
+// ─── HELPER: color galleries ────────────────────────────────
+const teeGallery = {
+  black: [
+    "/images/product-tee-black.png",
+    "/images/product-tee-black-back.png",
+    "/images/product-tee-black.png",
+    "/images/product-tee-black-back.png",
+  ],
+  grey: [
+    "/images/product-tee-grey.png",
+    "/images/product-tee-grey-back.png",
+    "/images/product-tee-grey.png",
+    "/images/product-tee-grey-back.png",
+  ],
+  white: [
+    "/images/product-tee-white.png",
+    "/images/product-tee-white-back.png",
+    "/images/product-tee-white.png",
+    "/images/product-tee-white-back.png",
+  ],
+};
+
+const hoodieGallery = {
+  black: [
+    "/images/product-hoodie-black.png",
+    "/images/product-hoodie-black-back.png",
+    "/images/product-hoodie-black-flat.png",
+    "/images/product-hoodie-black.png",
+  ],
+  grey: [
+    "/images/product-hoodie-grey.png",
+    "/images/product-hoodie-grey-flat.png",
+    "/images/product-hoodie-grey.png",
+    "/images/product-hoodie-grey-flat.png",
+  ],
+  white: [
+    "/images/product-hoodie-white.png",
+    "/images/product-hoodie-white-back.png",
+    "/images/product-hoodie-white-flat.png",
+    "/images/product-hoodie-white.png",
+  ],
+};
+
+const joggerGallery = {
+  black: [
+    "/images/product-jogger-black.png",
+    "/images/product-jogger-black-flat.png",
+    "/images/product-jogger-black.png",
+    "/images/product-jogger-black-flat.png",
+  ],
+  grey: [
+    "/images/product-jogger-grey.png",
+    "/images/product-jogger-grey-flat.png",
+    "/images/product-jogger-grey.png",
+    "/images/product-jogger-grey-flat.png",
+  ],
+  white: [
+    "/images/product-jogger-white.png",
+    "/images/product-jogger-white.png",
+    "/images/product-jogger-white.png",
+    "/images/product-jogger-white.png",
+  ],
+};
+
+const openHemGallery = {
+  black: [
+    "/images/product-jogger-openhemm-black.png",
+    "/images/product-jogger-openhem-black-flat.png",
+    "/images/product-jogger-openhemm-black.png",
+    "/images/product-jogger-openhem-black-flat.png",
+  ],
+  grey: [
+    "/images/product-jogger-openhem-grey.png",
+    "/images/product-jogger-openhem-grey-flat.png",
+    "/images/product-jogger-openhem-grey.png",
+    "/images/product-jogger-openhem-grey-flat.png",
+  ],
+  white: [
+    "/images/product-jogger-openhem-white.png",
+    "/images/product-jogger-openhem-white-flat.png",
+    "/images/product-jogger-openhem-white.png",
+    "/images/product-jogger-openhem-white-flat.png",
+  ],
+};
+
+// ─── SHARED COLOR DEFINITIONS ───────────────────────────────
+function teeColors(defaultColor: "black" | "white") {
+  return [
+    { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", gallery: teeGallery.black },
+    { name: "Grey",  value: "#888888", image: "/images/product-tee-grey.png",  gallery: teeGallery.grey  },
+    { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", gallery: teeGallery.white },
+  ];
+}
+
+function hoodieColors() {
+  return [
+    { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", gallery: hoodieGallery.black },
+    { name: "Grey",  value: "#888888", image: "/images/product-hoodie-grey.png",  gallery: hoodieGallery.grey  },
+    { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-white.png", gallery: hoodieGallery.white },
+  ];
+}
+
+function joggerColors() {
+  return [
+    { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-black.png", gallery: joggerGallery.black },
+    { name: "Grey",  value: "#888888", image: "/images/product-jogger-grey.png",  gallery: joggerGallery.grey  },
+    { name: "White", value: "#f5f5f5", image: "/images/product-jogger-white.png", gallery: joggerGallery.white },
+  ];
+}
+
+function openHemColors() {
+  return [
+    { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-openhemm-black.png", gallery: openHemGallery.black },
+    { name: "Grey",  value: "#888888", image: "/images/product-jogger-openhem-grey.png",   gallery: openHemGallery.grey  },
+    { name: "White", value: "#f5f5f5", image: "/images/product-jogger-openhem-white.png",  gallery: openHemGallery.white },
+  ];
+}
+
+// ─── FEATURED ───────────────────────────────────────────────
 export const featured = [
   {
     id: "xf-tee-essential",
@@ -7,23 +126,7 @@ export const featured = [
     description: "Regular Fit. Klassischer Schnitt für den Alltag. 100% Heavyweight Cotton. Unisex.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("white"),
   },
   {
     id: "xf-jogger-baggy",
@@ -33,23 +136,7 @@ export const featured = [
     description: "Baggy Fit. Sehr weit geschnitten — Streetwear-Style. Soft Fleece Interior. Unisex.",
     image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-jogger-black.png",
-        gallery: ["/images/product-jogger-black.png", "/images/product-jogger-black-flat.png", "/images/product-jogger-grey.png", "/images/product-jogger-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-jogger-grey.png",
-        gallery: ["/images/product-jogger-grey.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-jogger-white.png",
-        gallery: ["/images/product-jogger-white.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-white.png"],
-      },
-    ],
+    colors: joggerColors(),
   },
 ];
 
@@ -65,23 +152,7 @@ export const products = [
     description: "Slim Fit. Eng anliegend & körperbetont. 100% Heavyweight Cotton. Sportlicher Look.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("black"),
   },
   {
     id: "xf-tee-relaxed",
@@ -91,23 +162,7 @@ export const products = [
     description: "Relaxed Fit. Etwas weiter als Regular — locker & bequem. 100% Heavyweight Cotton.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("white"),
   },
   {
     id: "xf-tee-oversized",
@@ -117,23 +172,7 @@ export const products = [
     description: "Oversize Fit. Sehr weit geschnitten — reiner Streetwear-Style. 100% Heavyweight Cotton.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("black"),
   },
   {
     id: "xf-tee-boxy",
@@ -143,23 +182,7 @@ export const products = [
     description: "Boxy Fit. Breit & kurz geschnitten. Moderner Fashion-Look. 100% Heavyweight Cotton.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("white"),
   },
   {
     id: "xf-tee-longline",
@@ -169,23 +192,7 @@ export const products = [
     description: "Longline Cut. Länger als normal — urban & auffällig. 100% Heavyweight Cotton.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-tee-black.png",
-        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-tee-grey.png",
-        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-tee-white.png",
-        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
-      },
-    ],
+    colors: teeColors("black"),
   },
 
   // ─── HOODIES ────────────────────────────────────────────────
@@ -197,23 +204,7 @@ export const products = [
     description: "Oversize Fit. Sehr groß & locker — Streetwear. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-hoodie-black.png",
-        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-hoodie-grey.png",
-        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-hoodie-white.png",
-        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
-      },
-    ],
+    colors: hoodieColors(),
   },
   {
     id: "xf-hoodie-slim",
@@ -223,23 +214,7 @@ export const products = [
     description: "Slim Fit. Eng am Körper — sportlicher Look. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-hoodie-black.png",
-        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-hoodie-grey.png",
-        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-hoodie-white.png",
-        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
-      },
-    ],
+    colors: hoodieColors(),
   },
   {
     id: "xf-hoodie-boxy",
@@ -249,23 +224,7 @@ export const products = [
     description: "Boxy Fit. Breit & kurz geschnitten — moderner Look. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-grey.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-hoodie-black.png",
-        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-hoodie-grey.png",
-        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-hoodie-white.png",
-        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
-      },
-    ],
+    colors: hoodieColors(),
   },
   {
     id: "xf-hoodie-cropped",
@@ -275,23 +234,7 @@ export const products = [
     description: "Cropped Fit. Kurz geschnitten — trendig & Fashion. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-hoodie-black.png",
-        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-hoodie-grey.png",
-        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-hoodie-white.png",
-        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
-      },
-    ],
+    colors: hoodieColors(),
   },
 
   // ─── JOGGER ─────────────────────────────────────────────────
@@ -303,23 +246,7 @@ export const products = [
     description: "Open Hem. Kein Gummi unten — locker fallend & weit. Soft Fleece Interior. Streetwear-Style.",
     image: "/images/product-jogger-openhemm-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-jogger-openhemm-black.png",
-        gallery: ["/images/product-jogger-openhemm-black.png", "/images/product-jogger-openhem-black-flat.png", "/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhemm-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-jogger-openhem-grey.png",
-        gallery: ["/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhem-grey-flat.png", "/images/product-jogger-openhemm-black.png", "/images/product-jogger-openhem-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-jogger-openhem-white.png",
-        gallery: ["/images/product-jogger-openhem-white.png", "/images/product-jogger-openhem-white-flat.png", "/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhem-white.png"],
-      },
-    ],
+    colors: openHemColors(),
   },
   {
     id: "xf-jogger-slim",
@@ -329,22 +256,6 @@ export const products = [
     description: "Slim Fit. Eng am Bein — sportlich & modern. Soft Fleece Interior.",
     image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
-    colors: [
-      {
-        name: "Black", value: "#1a1a1a",
-        image: "/images/product-jogger-black.png",
-        gallery: ["/images/product-jogger-black.png", "/images/product-jogger-black-flat.png", "/images/product-jogger-grey.png", "/images/product-jogger-black.png"],
-      },
-      {
-        name: "Grey", value: "#888888",
-        image: "/images/product-jogger-grey.png",
-        gallery: ["/images/product-jogger-grey.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-grey.png"],
-      },
-      {
-        name: "White", value: "#f5f5f5",
-        image: "/images/product-jogger-white.png",
-        gallery: ["/images/product-jogger-white.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-white.png"],
-      },
-    ],
+    colors: joggerColors(),
   },
 ];
