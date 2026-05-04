@@ -53,13 +53,17 @@ export default function Support() {
     if (!subject.trim() || !message.trim()) return;
     setCreating(true);
     setCreateError(null);
-    const { error } = await supabase.from("tickets").insert({
+    const { data: ticketData, error } = await supabase.from("tickets").insert({
       user_id: user!.id,
       subject: subject.trim(),
-      message: message.trim(),
       status: "open",
-    });
+    }).select().single();
     if (error) { setCreateError(error.message); setCreating(false); return; }
+    await supabase.from("ticket_messages").insert({
+      ticket_id: ticketData.id,
+      sender_role: "user",
+      message: message.trim(),
+    });
 
     // Notify staff by email (fire and forget)
     const { data: workers } = await supabase.from("admins").select("email");

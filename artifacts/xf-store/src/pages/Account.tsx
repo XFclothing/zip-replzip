@@ -805,7 +805,7 @@ export default function Account() {
                         {t.account.cancel}
                       </button>
                     )}
-                    {activeOrder.status === "cancelled" && (
+                    {(activeOrder.status === "cancelled" || activeOrder.status === "old_orders") && (
                       <button
                         onClick={() => { deleteOrder(activeOrder.id); setActiveOrder(null); }}
                         disabled={deletingOrderId === activeOrder.id}

@@ -82,13 +82,17 @@ export function SupportWidget() {
     if (!subject.trim() || !message.trim() || creating) return;
     setCreating(true);
     setCreateError(null);
-    const { error } = await supabase.from("tickets").insert({
+    const { data: ticketData, error } = await supabase.from("tickets").insert({
       user_id: user!.id,
       subject: subject.trim(),
-      message: message.trim(),
       status: "open",
-    });
+    }).select().single();
     if (error) { setCreateError(error.message); setCreating(false); return; }
+    await supabase.from("ticket_messages").insert({
+      ticket_id: ticketData.id,
+      sender_role: "user",
+      message: message.trim(),
+    });
     const { data: workers } = await supabase.from("admins").select("email");
     const workerEmails = (workers || []).map((w: any) => w.email).filter(Boolean);
     sendTicketNotificationToStaff({
@@ -254,10 +258,6 @@ export function SupportWidget() {
               {user && view === "ticket" && activeTicket && (
                 <div className="flex flex-col h-full">
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                    <div className="bg-white/5 p-3">
-                      <p className="text-[9px] uppercase tracking-widest text-white/30 mb-1.5">Your message</p>
-                      <p className="text-xs text-white/70 leading-relaxed">{activeTicket.message}</p>
-                    </div>
                     {messages.map((msg) => (
                       <div
                         key={msg.id}

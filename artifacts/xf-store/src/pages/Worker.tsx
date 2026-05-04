@@ -32,6 +32,7 @@ export default function Worker() {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<OrderStatus | "all">("all");
   const [updatingOrder, setUpdatingOrder] = useState<string | null>(null);
+  const [activeOldOrder, setActiveOldOrder] = useState<Order | null>(null);
 
   // Tickets
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -280,31 +281,27 @@ export default function Worker() {
               ) : oldOrders.length === 0 ? (
                 <p className="text-white/25 text-xs uppercase tracking-widest py-12 text-center">No old orders</p>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {oldOrders.map((order) => (
-                    <div key={order.id} className="border border-white/5 p-6 opacity-60">
-                      <div className="flex flex-col lg:flex-row lg:items-start gap-6">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-4 mb-2 flex-wrap">
-                            <span className="text-white/50 font-semibold text-sm">${order.total_price.toFixed(2)}</span>
-                            <span className="text-white/20 text-xs">{new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
-                          </div>
-                          <p className="text-xs text-white/25 tracking-wide mb-3">{order.shipping_address}</p>
-                          {order.order_items && (
-                            <div className="space-y-1">
-                              {order.order_items.map((item) => (
-                                <p key={item.id} className="text-xs text-white/30">
-                                  {item.name} · {item.size} · ×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}
-                                </p>
-                              ))}
-                            </div>
-                          )}
+                    <button
+                      key={order.id}
+                      onClick={() => setActiveOldOrder(order)}
+                      className="w-full border border-white/8 p-5 text-left hover:border-white/20 transition-colors group"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-white/30 uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</p>
+                          <p className="text-white/70 font-semibold mt-1">${order.total_price.toFixed(2)}</p>
                         </div>
-                        <span className="text-[10px] uppercase tracking-[0.35em] px-3 py-1.5 border text-white/25 border-white/10 flex-shrink-0">
-                          Old Order
-                        </span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] uppercase tracking-[0.35em] text-white/30">Old Order</span>
+                          <span className="text-white/15 group-hover:text-white/40 transition-colors text-xs">›</span>
+                        </div>
                       </div>
-                    </div>
+                      {order.order_items && order.order_items.length > 0 && (
+                        <p className="text-xs text-white/25 mt-2">{order.order_items.map(i => i.name).join(", ")}</p>
+                      )}
+                    </button>
                   ))}
                 </div>
               )}
@@ -346,6 +343,76 @@ export default function Worker() {
           )}
         </motion.div>
       </div>
+
+      {/* Old Order Detail Modal */}
+      <AnimatePresence>
+        {activeOldOrder && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setActiveOldOrder(null)}
+              className="fixed inset-0 bg-black/80 z-50 backdrop-blur-sm" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-lg bg-[#0a0a0a] border border-white/10 max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-white/8">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.5em] text-white/25 mb-1">Order Details</p>
+                    <p className="text-[10px] text-white/20 font-mono">{activeOldOrder.id.split("-")[0].toUpperCase()}</p>
+                  </div>
+                  <button onClick={() => setActiveOldOrder(null)} className="text-white/30 hover:text-white transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="px-8 py-6 space-y-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Placed on</p>
+                      <p className="text-sm text-white/70">{new Date(activeOldOrder.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+                      <p className="text-xs text-white/30 mt-0.5">{new Date(activeOldOrder.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-2">Status</p>
+                      <span className="text-xs uppercase tracking-widest font-semibold text-white/40">Old Order</span>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Shipping Address</p>
+                    <div className="bg-white/3 border border-white/6 px-4 py-3">
+                      <p className="text-sm text-white/60 leading-relaxed whitespace-pre-line">{activeOldOrder.shipping_address}</p>
+                    </div>
+                  </div>
+                  {activeOldOrder.order_items && activeOldOrder.order_items.length > 0 && (
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.4em] text-white/25 mb-3">Items ({activeOldOrder.order_items.length})</p>
+                      <div className="border border-white/6 divide-y divide-white/5">
+                        {activeOldOrder.order_items.map((item) => (
+                          <div key={item.id} className="flex items-center justify-between px-4 py-3">
+                            <div>
+                              <p className="text-sm text-white/70">{item.name}</p>
+                              <p className="text-xs text-white/30 mt-0.5">{item.size} · ×{item.quantity}</p>
+                            </div>
+                            <p className="text-sm text-white/50">${(item.price * item.quantity).toFixed(2)}</p>
+                          </div>
+                        ))}
+                        <div className="flex items-center justify-between px-4 py-3 bg-white/3">
+                          <p className="text-xs uppercase tracking-[0.35em] text-white/40">Total</p>
+                          <p className="text-sm font-semibold text-white/80">${activeOldOrder.total_price.toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="pt-2 border-t border-white/8 flex justify-end">
+                    <button onClick={() => setActiveOldOrder(null)} className="text-[9px] uppercase tracking-[0.3em] text-white/25 hover:text-white/60 px-3 py-2 transition-colors">Close</button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Ticket Modal */}
       <AnimatePresence>
