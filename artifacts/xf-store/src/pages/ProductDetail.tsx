@@ -163,11 +163,12 @@ export default function ProductDetail() {
                           aria-hidden="true"
                           className="absolute pointer-events-none"
                           style={{
-                            width: "18%",
-                            top: "28%",
-                            left: "32%",
+                            width: "14%",
+                            top: "30%",
+                            left: "34%",
                             mixBlendMode: "screen",
-                            opacity: 0.55,
+                            opacity: 0.82,
+                            filter: "contrast(1.2) brightness(0.9)",
                           }}
                         />
                       </div>

@@ -49,11 +49,12 @@ export function ProductCard({ product, index }: ProductCardProps) {
           aria-hidden="true"
           className="absolute pointer-events-none"
           style={{
-            width: "20%",
-            top: "28%",
-            left: "32%",
+            width: "16%",
+            top: "30%",
+            left: "34%",
             mixBlendMode: "screen",
-            opacity: 0.5,
+            opacity: 0.82,
+            filter: "contrast(1.2) brightness(0.9)",
           }}
         />
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
