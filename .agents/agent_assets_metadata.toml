@@ -5,7 +5,7 @@ outputs = []
 id = "V--bkKUQ8Kxn4JlIbly2w"
 uri = "file://artifacts/xf-store/public/images/product-hoodie-white.png"
 type = "image"
-title = "white hoodie product"
+title = "white hoodie front"
 
 [[generated]]
 id = "1FL-nCvquYPowBffCAsx6"
@@ -18,3 +18,57 @@ id = "jlfyT9vd1m_GE2P48fFeB"
 uri = "file://artifacts/xf-store/public/images/product-jogger-white.png"
 type = "image"
 title = "white jogger product"
+
+[[generated]]
+id = "4qO52ZkTsRrtcUAtTBxps"
+uri = "file://artifacts/xf-store/public/images/product-hoodie-white-back.png"
+type = "image"
+title = "white hoodie back"
+
+[[generated]]
+id = "9jfWPta7vBaDcFr5VwJFV"
+uri = "file://artifacts/xf-store/public/images/product-hoodie-black-flat.png"
+type = "image"
+title = "black hoodie flat lay"
+
+[[generated]]
+id = "ZFlQ531GGVNM8tJfaP2Yz"
+uri = "file://artifacts/xf-store/public/images/product-hoodie-grey-flat.png"
+type = "image"
+title = "grey hoodie flat lay"
+
+[[generated]]
+id = "xV6ZC1wYIBnOVKVh2WQ61"
+uri = "file://artifacts/xf-store/public/images/product-hoodie-white-flat.png"
+type = "image"
+title = "white hoodie flat lay"
+
+[[generated]]
+id = "lHS61XHqshQcRLlb_XrVN"
+uri = "file://artifacts/xf-store/public/images/product-tee-black-back.png"
+type = "image"
+title = "black tee back"
+
+[[generated]]
+id = "JMVfhTIkifgIHdlGWy9qb"
+uri = "file://artifacts/xf-store/public/images/product-tee-grey-back.png"
+type = "image"
+title = "grey tee back"
+
+[[generated]]
+id = "FJ7g5WFttQPS5xleqdcmz"
+uri = "file://artifacts/xf-store/public/images/product-tee-white-back.png"
+type = "image"
+title = "white tee back"
+
+[[generated]]
+id = "3WUXZpDWFMsExQXVn-aVO"
+uri = "file://artifacts/xf-store/public/images/product-jogger-black-flat.png"
+type = "image"
+title = "black jogger flat lay"
+
+[[generated]]
+id = "IuU_jD4T61eXkzj75CgQr"
+uri = "file://artifacts/xf-store/public/images/product-jogger-grey-flat.png"
+type = "image"
+title = "grey jogger flat lay"

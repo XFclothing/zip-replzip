@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLang } from "@/context/LanguageContext";
+
+type ColorVariant = {
+  name: string;
+  value: string;
+  image: string;
+  gallery?: string[];
+  backImage?: string;
+};
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -14,7 +23,10 @@ export default function ProductDetail() {
   const { t } = useLang();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [added, setAdded] = useState(false);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" });
 
   const product = products.find((p) => p.id === id);
 
@@ -22,7 +34,23 @@ export default function ProductDetail() {
     window.scrollTo(0, 0);
     setSelectedSize(null);
     setSelectedColorIndex(0);
+    setActiveSlide(0);
   }, [id]);
+
+  useEffect(() => {
+    setActiveSlide(0);
+    emblaApi?.scrollTo(0);
+  }, [selectedColorIndex, emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setActiveSlide(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi]);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   if (!product) {
     return (
@@ -32,10 +60,11 @@ export default function ProductDetail() {
     );
   }
 
-  const colors = (product as any).colors as { name: string; value: string; image: string; backImage?: string }[] | undefined;
+  const colors = (product as any).colors as ColorVariant[] | undefined;
   const activeColor = colors ? colors[selectedColorIndex] : null;
+  const gallery: string[] = activeColor?.gallery
+    ?? (activeColor ? [activeColor.image, activeColor.backImage ?? activeColor.image] : [product.image]);
   const mainImage = activeColor ? activeColor.image : product.image;
-  const backImage = activeColor?.backImage ?? product.image;
   const cartName = colors ? `${product.name} — ${activeColor!.name}` : product.name;
 
   function handleAddToCart() {
@@ -59,57 +88,96 @@ export default function ProductDetail() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
 
-          {/* Images + Back Arrow */}
-          <div className="flex flex-col gap-6">
+          {/* Gallery */}
+          <div className="flex flex-col gap-4">
             {/* Back Arrow */}
             <button
               onClick={() => navigate("/shop")}
-              className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors w-fit"
+              className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors w-fit mb-2"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back</span>
             </button>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="aspect-[3/4] bg-muted relative overflow-hidden"
-            >
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={mainImage}
-                  src={mainImage}
-                  alt={cartName}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="w-full h-full object-cover absolute inset-0"
-                />
-              </AnimatePresence>
-            </motion.div>
+            {/* Main Carousel */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedColorIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="relative overflow-hidden"
+              >
+                <div ref={emblaRef} className="overflow-hidden">
+                  <div className="flex">
+                    {gallery.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="flex-none w-full aspect-[3/4] bg-muted relative overflow-hidden"
+                      >
+                        <img
+                          src={img}
+                          alt={`${cartName} view ${idx + 1}`}
+                          className="w-full h-full object-cover absolute inset-0"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="aspect-[3/4] bg-muted relative overflow-hidden"
-            >
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={backImage}
-                  src={backImage}
-                  alt={`${cartName} back`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="w-full h-full object-cover absolute inset-0"
-                />
-              </AnimatePresence>
-            </motion.div>
+                {/* Prev/Next buttons */}
+                {gallery.length > 1 && (
+                  <>
+                    <button
+                      onClick={scrollPrev}
+                      disabled={activeSlide === 0}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-all disabled:opacity-20"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={scrollNext}
+                      disabled={activeSlide === gallery.length - 1}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-all disabled:opacity-20"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
+
+                {/* Dot indicators */}
+                {gallery.length > 1 && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {gallery.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => emblaApi?.scrollTo(idx)}
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${
+                          activeSlide === idx ? "bg-foreground w-4" : "bg-foreground/30"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Thumbnail strip */}
+            {gallery.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {gallery.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => emblaApi?.scrollTo(idx)}
+                    className={`flex-none w-16 aspect-[3/4] bg-muted overflow-hidden border-2 transition-all ${
+                      activeSlide === idx ? "border-foreground" : "border-transparent opacity-50 hover:opacity-80"
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Info */}

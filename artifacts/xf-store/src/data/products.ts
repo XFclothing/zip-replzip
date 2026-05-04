@@ -8,9 +8,21 @@ export const featured = [
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
   {
@@ -22,9 +34,21 @@ export const featured = [
     image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-black.png", backImage: "/images/product-jogger-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-jogger-white.png", backImage: "/images/product-jogger-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-jogger-black.png",
+        gallery: ["/images/product-jogger-black.png", "/images/product-jogger-black-flat.png", "/images/product-jogger-grey.png", "/images/product-jogger-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-jogger-grey.png",
+        gallery: ["/images/product-jogger-grey.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-jogger-white.png",
+        gallery: ["/images/product-jogger-white.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-white.png"],
+      },
     ],
   },
 ];
@@ -42,9 +66,21 @@ export const products = [
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
   {
@@ -56,9 +92,21 @@ export const products = [
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
   {
@@ -70,9 +118,21 @@ export const products = [
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
   {
@@ -84,9 +144,21 @@ export const products = [
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
   {
@@ -98,9 +170,21 @@ export const products = [
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-tee-grey.png", backImage: "/images/product-tee-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-tee-black.png",
+        gallery: ["/images/product-tee-black.png", "/images/product-tee-black-back.png", "/images/product-tee-grey.png", "/images/product-tee-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-tee-grey.png",
+        gallery: ["/images/product-tee-grey.png", "/images/product-tee-grey-back.png", "/images/product-tee-black.png", "/images/product-tee-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-tee-white.png",
+        gallery: ["/images/product-tee-white.png", "/images/product-tee-white-back.png", "/images/product-tee-grey.png", "/images/product-tee-white.png"],
+      },
     ],
   },
 
@@ -114,9 +198,21 @@ export const products = [
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-white.png", backImage: "/images/product-hoodie-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-hoodie-black.png",
+        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-hoodie-grey.png",
+        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-hoodie-white.png",
+        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
+      },
     ],
   },
   {
@@ -128,9 +224,21 @@ export const products = [
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-white.png", backImage: "/images/product-hoodie-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-hoodie-black.png",
+        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-hoodie-grey.png",
+        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-hoodie-white.png",
+        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
+      },
     ],
   },
   {
@@ -142,9 +250,21 @@ export const products = [
     image: "/images/product-hoodie-grey.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-white.png", backImage: "/images/product-hoodie-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-hoodie-black.png",
+        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-hoodie-grey.png",
+        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-hoodie-white.png",
+        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
+      },
     ],
   },
   {
@@ -156,9 +276,21 @@ export const products = [
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-white.png", backImage: "/images/product-hoodie-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-hoodie-black.png",
+        gallery: ["/images/product-hoodie-black.png", "/images/product-hoodie-black-back.png", "/images/product-hoodie-black-flat.png", "/images/product-hoodie-grey.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-hoodie-grey.png",
+        gallery: ["/images/product-hoodie-grey.png", "/images/product-hoodie-grey.png", "/images/product-hoodie-grey-flat.png", "/images/product-hoodie-black.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-hoodie-white.png",
+        gallery: ["/images/product-hoodie-white.png", "/images/product-hoodie-white-back.png", "/images/product-hoodie-white-flat.png", "/images/product-hoodie-grey.png"],
+      },
     ],
   },
 
@@ -172,9 +304,21 @@ export const products = [
     image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
     colors: [
-      { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-black.png", backImage: "/images/product-jogger-black.png" },
-      { name: "Grey", value: "#888888", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
-      { name: "White", value: "#f5f5f5", image: "/images/product-jogger-white.png", backImage: "/images/product-jogger-white.png" },
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-jogger-black.png",
+        gallery: ["/images/product-jogger-black.png", "/images/product-jogger-black-flat.png", "/images/product-jogger-grey.png", "/images/product-jogger-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-jogger-grey.png",
+        gallery: ["/images/product-jogger-grey.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-jogger-white.png",
+        gallery: ["/images/product-jogger-white.png", "/images/product-jogger-grey-flat.png", "/images/product-jogger-black.png", "/images/product-jogger-white.png"],
+      },
     ],
   },
 ];
