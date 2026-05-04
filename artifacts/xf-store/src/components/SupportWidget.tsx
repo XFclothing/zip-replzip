@@ -82,6 +82,18 @@ export function SupportWidget() {
     if (!subject.trim() || !message.trim() || creating) return;
     setCreating(true);
     setCreateError(null);
+
+    // Ensure the profile row exists before inserting the ticket (FK: tickets.user_id → profiles.id)
+    await supabase.from("profiles").upsert(
+      {
+        id: user!.id,
+        email: user!.email || "",
+        name: user!.user_metadata?.name || user!.email?.split("@")[0] || "",
+        shipping_address: null,
+      },
+      { onConflict: "id", ignoreDuplicates: true }
+    );
+
     const { data: ticketData, error } = await supabase.from("tickets").insert({
       user_id: user!.id,
       subject: subject.trim(),
