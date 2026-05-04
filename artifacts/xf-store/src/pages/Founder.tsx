@@ -56,8 +56,10 @@ export default function Founder() {
   const [replying, setReplying] = useState(false);
 
   // Notify
-  const [notifySubject, setNotifySubject] = useState("");
-  const [notifyMessage, setNotifyMessage] = useState("");
+  const [notifySubject, setNotifySubject] = useState("The Drop is Live — XF Unseen Collection");
+  const [notifyMessage, setNotifyMessage] = useState(
+    "You signed up to be the first to know.\n\nThe wait is over.\n\nThe XF Unseen Collection by Xavier & Fynn is officially live. Limited pieces, no restock.\n\nShop now before it's gone.\n\n— Xavier & Fynn\nxf-store.com"
+  );
   const [notifySending, setNotifySending] = useState(false);
   const [notifyResult, setNotifyResult] = useState<{ ok: boolean; sent?: number; error?: string } | null>(null);
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);

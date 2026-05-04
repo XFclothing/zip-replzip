@@ -1,0 +1,84 @@
+2026-05-04T15:42:41.744899796Z ==> Downloading cache...
+2026-05-04T15:42:41.797595142Z ==> Cloning from https://github.com/XFclothing/zip-replzip
+2026-05-04T15:43:22.271063828Z ==> Checking out commit 67827e811a6c4c706ae6ff84d45519fdfcf6ec09 in branch main
+2026-05-04T15:43:29.896868661Z ==> Downloaded 162MB in 3s. Extraction took 5s.
+2026-05-04T15:43:41.170826685Z ==> Using Node.js version 24.14.1 (default)
+2026-05-04T15:43:41.205822029Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2026-05-04T15:43:41.334331989Z ==> Running build command 'npm install -g pnpm && pnpm install && pnpm --filter @workspace/xf-store run build && pnpm --filter @workspace/api-server run build'...
+2026-05-04T15:43:43.054812898Z 
+2026-05-04T15:43:43.054836869Z changed 1 package in 2s
+2026-05-04T15:43:43.054850339Z 
+2026-05-04T15:43:43.054947621Z 1 package is looking for funding
+2026-05-04T15:43:43.055049884Z   run `npm fund` for details
+2026-05-04T15:43:49.922424891Z 
+2026-05-04T15:43:49.922453152Z > @workspace/xf-store@0.0.0 build /opt/render/project/src/artifacts/xf-store
+2026-05-04T15:43:49.922457772Z > vite build --config vite.config.ts
+2026-05-04T15:43:49.922461062Z 
+2026-05-04T15:43:50.244150057Z vite v7.3.2 building client environment for production...
+2026-05-04T15:43:50.326978544Z transforming...
+2026-05-04T15:43:50.853671468Z src/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+2026-05-04T15:43:52.669845603Z src/components/ui/label.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+2026-05-04T15:43:54.953092886Z ✓ 2263 modules transformed.
+2026-05-04T15:43:55.478993932Z rendering chunks...
+2026-05-04T15:43:55.492871984Z computing gzip size...
+2026-05-04T15:43:55.52150184Z dist/public/index.html                                                               0.72 kB │ gzip:   0.40 kB
+2026-05-04T15:43:55.521519471Z dist/public/assets/ChatGPT_Image_3._Mai_2026__19_49_35_1777830790029-CqgIXlGL.png  831.54 kB
+2026-05-04T15:43:55.521602693Z dist/public/assets/index-CxiyIO8z.css                                              125.81 kB │ gzip:  19.58 kB
+2026-05-04T15:43:55.521615583Z dist/public/assets/index-CQ_mS1FZ.js                                               940.67 kB │ gzip: 265.59 kB
+2026-05-04T15:43:55.521665844Z 
+2026-05-04T15:43:55.521679894Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-05-04T15:43:55.521687465Z - Using dynamic import() to code-split the application
+2026-05-04T15:43:55.521694535Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2026-05-04T15:43:55.521700725Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2026-05-04T15:43:55.521980112Z ✓ built in 5.24s
+2026-05-04T15:43:56.007078858Z 
+2026-05-04T15:43:56.007101908Z > @workspace/api-server@0.0.0 build /opt/render/project/src/artifacts/api-server
+2026-05-04T15:43:56.007107319Z > node ./build.mjs
+2026-05-04T15:43:56.007111719Z 
+2026-05-04T15:43:56.7417146Z 
+2026-05-04T15:43:56.741741371Z   dist/index.mjs                       3.3mb ⚠️
+2026-05-04T15:43:56.741746731Z   dist/pino-worker.mjs               153.4kb
+2026-05-04T15:43:56.741750711Z   dist/pino-file.mjs                 142.1kb
+2026-05-04T15:43:56.741754531Z   dist/pino-pretty.mjs               114.6kb
+2026-05-04T15:43:56.741769901Z   dist/thread-stream-worker.mjs        7.3kb
+2026-05-04T15:43:56.741772561Z   dist/index.mjs.map                   4.8mb
+2026-05-04T15:43:56.741775112Z   dist/pino-worker.mjs.map           256.9kb
+2026-05-04T15:43:56.741777472Z   dist/pino-file.mjs.map             229.0kb
+2026-05-04T15:43:56.741779862Z   dist/pino-pretty.mjs.map           203.9kb
+2026-05-04T15:43:56.741782312Z   dist/thread-stream-worker.mjs.map   12.0kb
+2026-05-04T15:43:56.741784632Z 
+2026-05-04T15:43:56.741787812Z ⚡ Done in 669ms
+2026-05-04T15:44:01.577091941Z ==> Uploading build...
+2026-05-04T15:44:22.623779927Z ==> Uploaded in 12.7s. Compression took 8.3s
+2026-05-04T15:44:22.820876833Z ==> Build successful 🎉
+2026-05-04T15:44:28.033215744Z ==> Deploying...
+2026-05-04T15:44:28.221974764Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-05-04T15:45:31.026549024Z Warning: connect.session() MemoryStore is not
+2026-05-04T15:45:31.026565344Z designed for a production environment, as it will leak
+2026-05-04T15:45:31.026568055Z memory, and will not scale past a single process.
+2026-05-04T15:45:32.423661654Z /opt/render/project/src/node_modules/.pnpm/path-to-regexp@8.3.0/node_modules/path-to-regexp/src/index.ts:225
+2026-05-04T15:45:32.423682605Z       throw new PathError(`Missing parameter name at index ${index}`, str);
+2026-05-04T15:45:32.423686135Z             ^
+2026-05-04T15:45:32.423689175Z 
+2026-05-04T15:45:32.423692225Z PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+2026-05-04T15:45:32.423696075Z     at name (/opt/render/project/src/node_modules/.pnpm/path-to-regexp@8.3.0/node_modules/path-to-regexp/src/index.ts:225:13)
+2026-05-04T15:45:32.423699435Z     at parse (/opt/render/project/src/node_modules/.pnpm/path-to-regexp@8.3.0/node_modules/path-to-regexp/src/index.ts:242:62)
+2026-05-04T15:45:32.423703005Z     at pathToRegexp (/opt/render/project/src/node_modules/.pnpm/path-to-regexp@8.3.0/node_modules/path-to-regexp/src/index.ts:480:54)
+2026-05-04T15:45:32.423706025Z     at Object.match (/opt/render/project/src/node_modules/.pnpm/path-to-regexp@8.3.0/node_modules/path-to-regexp/src/index.ts:438:28)
+2026-05-04T15:45:32.423709185Z     at matcher (/opt/render/project/src/node_modules/.pnpm/router@2.2.0/node_modules/router/lib/layer.js:86:23)
+2026-05-04T15:45:32.423712295Z     at new Layer (/opt/render/project/src/node_modules/.pnpm/router@2.2.0/node_modules/router/lib/layer.js:93:62)
+2026-05-04T15:45:32.423715425Z     at router8.route (/opt/render/project/src/node_modules/.pnpm/router@2.2.0/node_modules/router/index.js:428:17)
+2026-05-04T15:45:32.423718415Z     at app2.route (/opt/render/project/src/node_modules/.pnpm/express@5.2.1/node_modules/express/lib/application.js:257:22)
+2026-05-04T15:45:32.423721575Z     at app2.app2.<computed> (/opt/render/project/src/node_modules/.pnpm/express@5.2.1/node_modules/express/lib/application.js:478:22)
+2026-05-04T15:45:32.423725126Z     at <anonymous> (/opt/render/project/src/artifacts/api-server/src/app.ts:63:7) {
+2026-05-04T15:45:32.423728666Z   originalPath: '*'
+2026-05-04T15:45:32.423731835Z }
+2026-05-04T15:45:32.423734656Z 
+2026-05-04T15:45:32.423737406Z Node.js v24.14.1
+2026-05-04T15:45:32.634051758Z /opt/render/project/src/artifacts/api-server:
+2026-05-04T15:45:32.634068858Z  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/api-server@0.0.0 start: `node --enable-source-maps ./dist/index.mjs`
+2026-05-04T15:45:32.634074518Z Exit status 1
+2026-05-04T15:45:32.993774079Z ==> No open ports detected, continuing to scan...
+2026-05-04T15:45:33.334310198Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-05-04T15:45:41.44264491Z ==> Exited with status 1
+2026-05-04T15:45:41.444952732Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
