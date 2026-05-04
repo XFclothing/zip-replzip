@@ -1,11 +1,22 @@
 import { Router } from "express";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 const router = Router();
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+const GMX_EMAIL = process.env.GMX_EMAIL || "xfclothing@gmx.de";
+const GMX_PASSWORD = process.env.GMX_PASSWORD || "";
 
 const STAFF_EMAILS = ["xfclothing@gmx.de", "xaviermalucha@gmail.com"];
-const FROM = "XF Store <onboarding@resend.dev>";
+const FROM = `XF Store <${GMX_EMAIL}>`;
+
+function createTransport() {
+  return nodemailer.createTransport({
+    host: "mail.gmx.net",
+    port: 587,
+    secure: false,
+    auth: { user: GMX_EMAIL, pass: GMX_PASSWORD },
+  });
+}
 
 const otpStore = new Map<string, { code: string; expires: number }>();
 
@@ -23,7 +34,7 @@ router.post("/email/send-otp", async (req, res) => {
   otpStore.set(email.toLowerCase(), { code, expires: Date.now() + 5 * 60 * 1000 });
 
   try {
-    await resend.emails.send({
+    await createTransport().sendMail({
       from: FROM,
       to: email,
       subject: "XF — Verification Code",
@@ -75,17 +86,18 @@ router.post("/email/order", async (req, res) => {
     .join("\n");
 
   const allStaff = [...new Set([...STAFF_EMAILS, ...(workerEmails || [])])];
+  const transport = createTransport();
 
   try {
     await Promise.all([
-      resend.emails.send({
+      transport.sendMail({
         from: FROM,
         to: customerEmail,
         subject: "Order Confirmed — XF Store",
         text: `Hey ${customerName},\n\nyour order has been received!\n\nOrder #${orderId}\nTotal: €${Number(total).toFixed(2)}\nShipping address: ${shippingAddress}\n\nItems:\n${itemsList}\n\nThank you for your purchase!\n— XF Store`,
       }),
       ...allStaff.map((email) =>
-        resend.emails.send({
+        transport.sendMail({
           from: FROM,
           to: email,
           subject: `New Order — ${customerName}`,
@@ -104,11 +116,12 @@ router.post("/email/ticket", async (req, res) => {
   const { customerEmail, customerName, subject, message, workerEmails } = req.body;
 
   const allStaff = [...new Set([...STAFF_EMAILS, ...(workerEmails || [])])];
+  const transport = createTransport();
 
   try {
     await Promise.all(
       allStaff.map((email) =>
-        resend.emails.send({
+        transport.sendMail({
           from: FROM,
           to: email,
           subject: `New Support Ticket — ${subject}`,
@@ -130,7 +143,7 @@ router.post("/email/newsletter-confirm", async (req, res) => {
     return;
   }
   try {
-    await resend.emails.send({
+    await createTransport().sendMail({
       from: FROM,
       to: email,
       subject: "XF — You're on the list",
@@ -184,9 +197,10 @@ router.post("/email/notify-subscribers", async (req, res) => {
   <p style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;margin:0;">XF by Xavier &amp; Fynn</p>
 </div>`;
 
+    const transport = createTransport();
     await Promise.all(
       emails.map((to) =>
-        resend.emails.send({ from: FROM, to, subject: `XF — ${subject}`, html: htmlBody })
+        transport.sendMail({ from: FROM, to, subject: `XF — ${subject}`, html: htmlBody })
       )
     );
 
