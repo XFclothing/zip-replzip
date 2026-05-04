@@ -7,6 +7,11 @@ export const featured = [
     description: "Regular Fit. Klassischer Schnitt für den Alltag. 100% Heavyweight Cotton. Unisex.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
   {
     id: "xf-jogger-baggy",
@@ -14,8 +19,13 @@ export const featured = [
     category: "jogger",
     price: 50,
     description: "Baggy Fit. Sehr weit geschnitten — Streetwear-Style. Soft Fleece Interior. Unisex.",
-    image: "/images/product-jogger-baggy.avif",
+    image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-black.png", backImage: "/images/product-jogger-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
+    ],
   },
 ];
 
@@ -31,6 +41,11 @@ export const products = [
     description: "Slim Fit. Eng anliegend & körperbetont. 100% Heavyweight Cotton. Sportlicher Look.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
   {
     id: "xf-tee-relaxed",
@@ -40,6 +55,11 @@ export const products = [
     description: "Relaxed Fit. Etwas weiter als Regular — locker & bequem. 100% Heavyweight Cotton.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
   {
     id: "xf-tee-oversized",
@@ -49,6 +69,11 @@ export const products = [
     description: "Oversize Fit. Sehr weit geschnitten — reiner Streetwear-Style. 100% Heavyweight Cotton.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
   {
     id: "xf-tee-boxy",
@@ -58,6 +83,11 @@ export const products = [
     description: "Boxy Fit. Breit & kurz geschnitten. Moderner Fashion-Look. 100% Heavyweight Cotton.",
     image: "/images/product-tee-white.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
   {
     id: "xf-tee-longline",
@@ -67,6 +97,11 @@ export const products = [
     description: "Longline Cut. Länger als normal — urban & auffällig. 100% Heavyweight Cotton.",
     image: "/images/product-tee-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-tee-black.png", backImage: "/images/product-tee-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-tee-white.png", backImage: "/images/product-tee-white.png" },
+    ],
   },
 
   // ─── HOODIES ────────────────────────────────────────────────
@@ -81,6 +116,7 @@ export const products = [
     colors: [
       { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
       { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
     ],
   },
   {
@@ -91,6 +127,11 @@ export const products = [
     description: "Slim Fit. Eng am Körper — sportlicher Look. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+    ],
   },
   {
     id: "xf-hoodie-boxy",
@@ -100,6 +141,11 @@ export const products = [
     description: "Boxy Fit. Breit & kurz geschnitten — moderner Look. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-grey.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+    ],
   },
   {
     id: "xf-hoodie-cropped",
@@ -109,6 +155,11 @@ export const products = [
     description: "Cropped Fit. Kurz geschnitten — trendig & Fashion. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+    ],
   },
 
   // ─── JOGGER ─────────────────────────────────────────────────
@@ -118,7 +169,12 @@ export const products = [
     category: "jogger",
     price: 35,
     description: "Slim Fit. Eng am Bein — sportlich & modern. Soft Fleece Interior.",
-    image: "/images/product-jogger-slim.avif",
+    image: "/images/product-jogger-black.png",
     sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-jogger-black.png", backImage: "/images/product-jogger-black.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
+      { name: "White", value: "#f5f5f5", image: "/images/product-jogger-grey.png", backImage: "/images/product-jogger-grey.png" },
+    ],
   },
 ];

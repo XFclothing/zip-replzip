@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "wouter";
+import { useParams, useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -8,6 +9,7 @@ import { useLang } from "@/context/LanguageContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const [, navigate] = useLocation();
   const { addToCart } = useCart();
   const { t } = useLang();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -57,8 +59,17 @@ export default function ProductDetail() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
 
-          {/* Images */}
+          {/* Images + Back Arrow */}
           <div className="flex flex-col gap-6">
+            {/* Back Arrow */}
+            <button
+              onClick={() => navigate("/shop")}
+              className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors w-fit"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back</span>
+            </button>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -141,7 +152,10 @@ export default function ProductDetail() {
                               ? "border-foreground scale-110"
                               : "border-transparent hover:border-foreground/40"
                           }`}
-                          style={{ backgroundColor: color.value }}
+                          style={{
+                            backgroundColor: color.value,
+                            boxShadow: color.name === "White" ? "inset 0 0 0 1px #ccc" : undefined,
+                          }}
                         >
                           {selectedColorIndex === idx && (
                             <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-widest text-muted-foreground whitespace-nowrap">
