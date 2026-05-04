@@ -3,12 +3,18 @@ const teeGallery = {
   black: [
     "/images/product-tee-black.png",
     "/images/product-tee-black-back.png",
+    "/images/product-tee-black.png",
+    "/images/product-tee-black-back.png",
   ],
   grey: [
     "/images/product-tee-grey.png",
     "/images/product-tee-grey-back.png",
+    "/images/product-tee-grey.png",
+    "/images/product-tee-grey-back.png",
   ],
   white: [
+    "/images/product-tee-white.png",
+    "/images/product-tee-white-back.png",
     "/images/product-tee-white.png",
     "/images/product-tee-white-back.png",
   ],
@@ -19,8 +25,11 @@ const hoodieGallery = {
     "/images/product-hoodie-black.png",
     "/images/product-hoodie-black-back.png",
     "/images/product-hoodie-black-flat.png",
+    "/images/product-hoodie-black.png",
   ],
   grey: [
+    "/images/product-hoodie-grey.png",
+    "/images/product-hoodie-grey-flat.png",
     "/images/product-hoodie-grey.png",
     "/images/product-hoodie-grey-flat.png",
   ],
@@ -28,6 +37,7 @@ const hoodieGallery = {
     "/images/product-hoodie-white.png",
     "/images/product-hoodie-white-back.png",
     "/images/product-hoodie-white-flat.png",
+    "/images/product-hoodie-white.png",
   ],
 };
 
@@ -35,12 +45,19 @@ const joggerGallery = {
   black: [
     "/images/product-jogger-black.png",
     "/images/product-jogger-black-flat.png",
+    "/images/product-jogger-black.png",
+    "/images/product-jogger-black-flat.png",
   ],
   grey: [
     "/images/product-jogger-grey.png",
     "/images/product-jogger-grey-flat.png",
+    "/images/product-jogger-grey.png",
+    "/images/product-jogger-grey-flat.png",
   ],
   white: [
+    "/images/product-jogger-white.png",
+    "/images/product-jogger-white.png",
+    "/images/product-jogger-white.png",
     "/images/product-jogger-white.png",
   ],
 };
@@ -49,12 +66,18 @@ const openHemGallery = {
   black: [
     "/images/product-jogger-openhemm-black.png",
     "/images/product-jogger-openhem-black-flat.png",
+    "/images/product-jogger-openhemm-black.png",
+    "/images/product-jogger-openhem-black-flat.png",
   ],
   grey: [
     "/images/product-jogger-openhem-grey.png",
     "/images/product-jogger-openhem-grey-flat.png",
+    "/images/product-jogger-openhem-grey.png",
+    "/images/product-jogger-openhem-grey-flat.png",
   ],
   white: [
+    "/images/product-jogger-openhem-white.png",
+    "/images/product-jogger-openhem-white-flat.png",
     "/images/product-jogger-openhem-white.png",
     "/images/product-jogger-openhem-white-flat.png",
   ],
