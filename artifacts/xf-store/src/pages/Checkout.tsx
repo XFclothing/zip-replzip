@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
-import { Check } from "lucide-react";
+import { Check, CreditCard, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/lib/supabase";
-import { sendOrderConfirmation, sendOrderNotificationToStaff } from "@/lib/email";
 
 type ShippingAddress = {
   id: string;
@@ -14,9 +13,21 @@ type ShippingAddress = {
   is_default: boolean;
 };
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+async function apiPost(path: string, body: unknown) {
+  const res = await fetch(`${BASE}/api${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(body),
+  });
+  return res.json();
+}
+
 export default function Checkout() {
   const { user, profile } = useAuth();
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice } = useCart();
   const [, navigate] = useLocation();
 
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
@@ -66,44 +77,9 @@ export default function Checkout() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!finalAddress) { setError("Please enter or select a shipping address."); return; }
+
     setSubmitting(true);
     setError(null);
-
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .insert({
-        user_id: user!.id,
-        total_price: totalPrice,
-        status: "pending",
-        shipping_address: finalAddress,
-      })
-      .select()
-      .single();
-
-    if (orderError || !order) {
-      console.error("Order insert error:", orderError);
-      setError(`Failed to place order: ${orderError?.message || "unknown error"}`);
-      setSubmitting(false);
-      return;
-    }
-
-    const { error: itemsError } = await supabase.from("order_items").insert(
-      items.map((item) => ({
-        order_id: order.id,
-        product_id: null, // local product IDs are not UUIDs
-        name: item.name,
-        price: Number(item.price) || 0,
-        size: item.size,
-        quantity: item.quantity,
-      }))
-    );
-
-    if (itemsError) {
-      console.error("Order items error:", itemsError);
-      setError(`Failed to save order items: ${itemsError.message}`);
-      setSubmitting(false);
-      return;
-    }
 
     // Save new address to account if typed manually
     if (selectedAddressId === "new" && customAddress.trim()) {
@@ -115,26 +91,26 @@ export default function Checkout() {
       });
     }
 
-    // Fetch worker emails for staff notification
-    const { data: workers } = await supabase.from("admins").select("email");
-    const workerEmails = (workers || []).map((w: any) => w.email).filter(Boolean);
-
-    const emailParams = {
-      customerEmail: user!.email || "",
-      customerName: profile?.name || user!.email?.split("@")[0] || "",
-      orderId: order.id,
-      total: totalPrice,
+    const data = await apiPost("/stripe/checkout", {
+      items: items.map((i) => ({
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+        size: i.size,
+        image: i.image,
+      })),
       shippingAddress: finalAddress,
-      items: items.map((i) => ({ name: i.name, size: i.size, quantity: i.quantity, price: i.price })),
-      workerEmails,
-    };
+      email: profile?.email || user!.email || "",
+      customerName: profile?.name || "",
+      userId: user!.id,
+    });
 
-    // Send emails (fire and forget — don't block checkout on email failure)
-    sendOrderConfirmation(emailParams);
-    sendOrderNotificationToStaff(emailParams);
-
-    clearCart();
-    navigate("/account");
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      setError(data.error || "Failed to start checkout. Please try again.");
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -248,14 +224,44 @@ export default function Checkout() {
                 )}
               </div>
 
+              {/* Payment Methods */}
+              <div className="border border-white/8 p-6">
+                <h2 className="text-xs uppercase tracking-[0.4em] text-white/40 mb-5">Payment</h2>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2">
+                    <CreditCard className="w-4 h-4 text-white/60" />
+                    <span className="text-xs text-white/60 uppercase tracking-wider">Card</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2">
+                    <span className="text-xs font-bold text-[#FFB3C7]">K</span>
+                    <span className="text-xs text-white/60 uppercase tracking-wider">Klarna</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2">
+                    <span className="text-xs font-bold text-[#009CDE]">P</span>
+                    <span className="text-xs text-white/60 uppercase tracking-wider">PayPal</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2">
+                    <span className="text-xs text-white/60 uppercase tracking-wider"> Pay</span>
+                  </div>
+                </div>
+                <p className="text-[10px] text-white/25 mt-3 tracking-wider">You will be redirected to Stripe's secure checkout to complete payment.</p>
+              </div>
+
               {error && <p className="text-red-400/80 text-xs tracking-wide">{error}</p>}
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50"
+                className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {submitting ? "Placing Order..." : `Place Order · €${totalPrice.toFixed(2)}`}
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Redirecting to Stripe...
+                  </>
+                ) : (
+                  `Pay · €${totalPrice.toFixed(2)}`
+                )}
               </button>
             </form>
           </div>

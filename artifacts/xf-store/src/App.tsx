@@ -13,6 +13,7 @@ import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Account from "@/pages/Account";
 import Checkout from "@/pages/Checkout";
+import CheckoutSuccess from "@/pages/CheckoutSuccess";
 import Worker from "@/pages/Worker";
 import Founder from "@/pages/Founder";
 import Support from "@/pages/Support";
@@ -46,6 +47,7 @@ function Router() {
           <Route path="/login" component={Login} />
           <Route path="/account" component={Account} />
           <Route path="/checkout" component={Checkout} />
+          <Route path="/checkout/success" component={CheckoutSuccess} />
           <Route path="/support" component={Support} />
           <Route path="/reset-password" component={ResetPassword} />
           <Route path="/worker" component={Worker} />
