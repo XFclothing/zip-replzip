@@ -72,3 +72,39 @@ id = "IuU_jD4T61eXkzj75CgQr"
 uri = "file://artifacts/xf-store/public/images/product-jogger-grey-flat.png"
 type = "image"
 title = "grey jogger flat lay"
+
+[[generated]]
+id = "r8Xue3F73XFvg41MqThHI"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhemm-black.png"
+type = "image"
+title = "black open hem jogger"
+
+[[generated]]
+id = "1puFRn8mu5e149xN2last"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhem-grey.png"
+type = "image"
+title = "grey open hem jogger"
+
+[[generated]]
+id = "T4gu7qNTkpoc-UV-d-zAW"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhem-white.png"
+type = "image"
+title = "white open hem jogger"
+
+[[generated]]
+id = "j63jrFMNxjfwZEGAKVHvy"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhem-black-flat.png"
+type = "image"
+title = "black open hem jogger flat"
+
+[[generated]]
+id = "AKoZnP518aJ9fejkIVlbU"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhem-grey-flat.png"
+type = "image"
+title = "grey open hem jogger flat"
+
+[[generated]]
+id = "gY93psIQFzYwaDULid6o0"
+uri = "file://artifacts/xf-store/public/images/product-jogger-openhem-white-flat.png"
+type = "image"
+title = "white open hem jogger flat"

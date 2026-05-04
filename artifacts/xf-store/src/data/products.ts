@@ -296,6 +296,32 @@ export const products = [
 
   // ─── JOGGER ─────────────────────────────────────────────────
   {
+    id: "xf-jogger-openhem",
+    name: "XF JOGGER Open Hem",
+    category: "jogger",
+    price: 45,
+    description: "Open Hem. Kein Gummi unten — locker fallend & weit. Soft Fleece Interior. Streetwear-Style.",
+    image: "/images/product-jogger-openhemm-black.png",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      {
+        name: "Black", value: "#1a1a1a",
+        image: "/images/product-jogger-openhemm-black.png",
+        gallery: ["/images/product-jogger-openhemm-black.png", "/images/product-jogger-openhem-black-flat.png", "/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhemm-black.png"],
+      },
+      {
+        name: "Grey", value: "#888888",
+        image: "/images/product-jogger-openhem-grey.png",
+        gallery: ["/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhem-grey-flat.png", "/images/product-jogger-openhemm-black.png", "/images/product-jogger-openhem-grey.png"],
+      },
+      {
+        name: "White", value: "#f5f5f5",
+        image: "/images/product-jogger-openhem-white.png",
+        gallery: ["/images/product-jogger-openhem-white.png", "/images/product-jogger-openhem-white-flat.png", "/images/product-jogger-openhem-grey.png", "/images/product-jogger-openhem-white.png"],
+      },
+    ],
+  },
+  {
     id: "xf-jogger-slim",
     name: "XF JOGGER Slim Fit",
     category: "jogger",
