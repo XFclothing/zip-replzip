@@ -63,6 +63,13 @@ export default function Account() {
 
   useEffect(() => {
     if (!loading && !user) navigate("/login");
+    if (!loading && user) {
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel().then(({ data }) => {
+        if (data && data.nextLevel === "aal2" && data.nextLevel !== data.currentLevel) {
+          navigate("/login");
+        }
+      });
+    }
   }, [user, loading]);
 
   useEffect(() => {

@@ -52,6 +52,8 @@ export default function Login() {
       const emailMfaMethod = authUser?.user_metadata?.mfa_method === "email";
 
       if (emailMfaMethod) {
+        // Sign out the AAL1 session so the user is NOT authenticated until they complete email MFA
+        await supabase.auth.signOut();
         setEmailMfaSending(true);
         await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
         setEmailMfaSending(false);
@@ -139,7 +141,7 @@ export default function Login() {
 
   async function handleEmailMfaVerify(e: React.FormEvent) {
     e.preventDefault();
-    if (emailMfaCode.length !== 6) return;
+    if (emailMfaCode.length !== 8) return;
     setError(null);
     setLoading(true);
     const { error } = await supabase.auth.verifyOtp({ email, token: emailMfaCode, type: "email" });
@@ -368,17 +370,17 @@ export default function Login() {
                 <input
                   type="text"
                   inputMode="numeric"
-                  maxLength={6}
+                  maxLength={8}
                   value={emailMfaCode}
                   onChange={(e) => setEmailMfaCode(e.target.value.replace(/\D/g, ""))}
-                  placeholder="000000"
+                  placeholder="00000000"
                   autoFocus
                   className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-4 text-center text-2xl tracking-[0.6em] outline-none focus:border-white/30 transition-colors"
                 />
                 {error && <p className="text-red-400/80 text-xs tracking-wide text-center">{error}</p>}
                 <button
                   type="submit"
-                  disabled={loading || emailMfaCode.length !== 6}
+                  disabled={loading || emailMfaCode.length !== 8}
                   className="w-full bg-white text-black py-4 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-white/90 transition-colors disabled:opacity-40"
                 >
                   {loading ? t.login.verifying : t.login.confirm}
