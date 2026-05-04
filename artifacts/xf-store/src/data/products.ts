@@ -71,22 +71,17 @@ export const products = [
 
   // ─── HOODIES ────────────────────────────────────────────────
   {
-    id: "xf-hoodie-black",
-    name: "XF Oversize Hoodie Black",
+    id: "xf-hoodie-oversized",
+    name: "XF Oversize Hoodie",
     category: "hoodie",
     price: 60,
     description: "Oversize Fit. Sehr groß & locker — Streetwear. Heavy Cotton. Premium Quality.",
     image: "/images/product-hoodie-black.png",
     sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    id: "xf-hoodie-grey",
-    name: "XF Oversize Hoodie Grey",
-    category: "hoodie",
-    price: 60,
-    description: "Oversize Fit. Sehr groß & locker — Streetwear. Heavy Cotton. Premium Quality.",
-    image: "/images/product-hoodie-grey.png",
-    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Black", value: "#1a1a1a", image: "/images/product-hoodie-black.png", backImage: "/images/product-hoodie-black-back.png" },
+      { name: "Grey", value: "#888888", image: "/images/product-hoodie-grey.png", backImage: "/images/product-hoodie-grey.png" },
+    ],
   },
   {
     id: "xf-hoodie-slim",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "wouter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -11,12 +11,15 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const { t } = useLang();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [added, setAdded] = useState(false);
 
   const product = products.find((p) => p.id === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setSelectedSize(null);
+    setSelectedColorIndex(0);
   }, [id]);
 
   if (!product) {
@@ -27,7 +30,11 @@ export default function ProductDetail() {
     );
   }
 
-  const backAngleImage = id === "xf-hoodie-black" ? "/images/product-hoodie-black-back.png" : product.image;
+  const colors = (product as any).colors as { name: string; value: string; image: string; backImage?: string }[] | undefined;
+  const activeColor = colors ? colors[selectedColorIndex] : null;
+  const mainImage = activeColor ? activeColor.image : product.image;
+  const backImage = activeColor?.backImage ?? product.image;
+  const cartName = colors ? `${product.name} — ${activeColor!.name}` : product.name;
 
   function handleAddToCart() {
     if (product!.sizes.length > 0 && !selectedSize) {
@@ -35,11 +42,11 @@ export default function ProductDetail() {
       return;
     }
     addToCart({
-      productId: product!.id,
-      name: product!.name,
+      productId: product!.id + (activeColor ? `-${activeColor.name.toLowerCase()}` : ""),
+      name: cartName,
       price: product!.price,
       size: selectedSize || "ONE SIZE",
-      image: product!.image,
+      image: mainImage,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -50,18 +57,26 @@ export default function ProductDetail() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
 
+          {/* Images */}
           <div className="flex flex-col gap-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="aspect-[3/4] bg-muted relative"
+              className="aspect-[3/4] bg-muted relative overflow-hidden"
             >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={mainImage}
+                  src={mainImage}
+                  alt={cartName}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-cover absolute inset-0"
+                />
+              </AnimatePresence>
             </motion.div>
 
             <motion.div
@@ -69,25 +84,38 @@ export default function ProductDetail() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="aspect-[3/4] bg-muted relative"
+              className="aspect-[3/4] bg-muted relative overflow-hidden"
             >
-              <img
-                src={backAngleImage}
-                alt={`${product.name} alternate view`}
-                className="w-full h-full object-cover"
-              />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={backImage}
+                  src={backImage}
+                  alt={`${cartName} back`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-cover absolute inset-0"
+                />
+              </AnimatePresence>
             </motion.div>
           </div>
 
+          {/* Info */}
           <div className="flex flex-col lg:sticky lg:top-32 h-fit">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-widest mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-widest mb-2">
                 {product.name}
               </h1>
+              {activeColor && (
+                <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-2">
+                  {activeColor.name}
+                </p>
+              )}
               <p className="text-xl tracking-wider mb-10">€{product.price}</p>
 
               <div className="space-y-8 mb-10">
@@ -98,6 +126,35 @@ export default function ProductDetail() {
                   </p>
                 </div>
 
+                {/* Color picker */}
+                {colors && colors.length > 0 && (
+                  <div>
+                    <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">Color</h3>
+                    <div className="flex gap-3">
+                      {colors.map((color, idx) => (
+                        <button
+                          key={color.name}
+                          onClick={() => setSelectedColorIndex(idx)}
+                          title={color.name}
+                          className={`relative w-10 h-10 rounded-full border-2 transition-all duration-200 ${
+                            selectedColorIndex === idx
+                              ? "border-foreground scale-110"
+                              : "border-transparent hover:border-foreground/40"
+                          }`}
+                          style={{ backgroundColor: color.value }}
+                        >
+                          {selectedColorIndex === idx && (
+                            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-widest text-muted-foreground whitespace-nowrap">
+                              {color.name}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Size picker */}
                 {product.sizes.length > 0 && (
                   <div>
                     <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">{t.product.size}</h3>
