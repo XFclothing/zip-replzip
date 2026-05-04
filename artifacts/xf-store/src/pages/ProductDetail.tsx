@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
@@ -16,11 +16,47 @@ type ColorVariant = {
   backImage?: string;
 };
 
+function InfoAccordion({ title, items }: { title: string; items: string[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-border">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between py-4 text-xs uppercase tracking-widest text-foreground hover:text-muted-foreground transition-colors"
+      >
+        <span>{title}</span>
+        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <ul className="pb-5 space-y-2">
+              {items.map((item, i) => (
+                <li key={i} className="text-sm text-muted-foreground font-light leading-relaxed flex gap-2">
+                  <span className="mt-0.5 shrink-0">–</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function ProductDetail() {
   const { id } = useParams();
   const [, navigate] = useLocation();
   const { addToCart } = useCart();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -267,10 +303,60 @@ export default function ProductDetail() {
                 {added ? t.product.addedToCart : t.product.addToCart}
               </Button>
 
-              <div className="mt-12 space-y-4 border-t border-border pt-8 text-xs uppercase tracking-widest text-muted-foreground">
-                <p>{t.product.freeShipping}</p>
-                <p>{t.product.returnPolicy}</p>
-                <p>{t.product.designedIn}</p>
+              {/* Info Accordion */}
+              <div className="mt-10 border-t border-border">
+                {[
+                  {
+                    title: lang === "de" ? "Versand & Lieferzeit" : "Shipping & Delivery",
+                    content: lang === "de"
+                      ? [
+                          "Lieferzeit: 1–2 Wochen nach Bestelleingang.",
+                          "Kostenloser Versand ab €150.",
+                          "Wir versenden aus Deutschland — international verfügbar.",
+                          "Tracking-Link wird per E-Mail gesendet.",
+                        ]
+                      : [
+                          "Delivery time: 1–2 weeks after order is placed.",
+                          "Free shipping on orders over €150.",
+                          "We ship from Germany — international shipping available.",
+                          "Tracking link sent via email after dispatch.",
+                        ],
+                  },
+                  {
+                    title: lang === "de" ? "Rückgabe & Rückerstattung" : "Returns & Refunds",
+                    content: lang === "de"
+                      ? [
+                          "14-tägiges Rückgaberecht ab Erhalt der Ware.",
+                          "Artikel müssen ungetragen und ungewaschen zurückgesendet werden.",
+                          "Rückerstattung innerhalb von 5–7 Werktagen nach Eingang.",
+                          "Kontakt: support@xfclothing.com",
+                        ]
+                      : [
+                          "14-day return window from date of delivery.",
+                          "Items must be unworn and unwashed.",
+                          "Refunds processed within 5–7 business days of receipt.",
+                          "Contact us at: support@xfclothing.com",
+                        ],
+                  },
+                  {
+                    title: lang === "de" ? "Produktinfos" : "Product Info",
+                    content: lang === "de"
+                      ? [
+                          "Im Studio entworfen — limitierte Auflagen.",
+                          "100 % Premium Heavy Cotton.",
+                          "Oversized Fit — für eine Größe größer bestellen empfohlen.",
+                          "Maschinenwaschbar bei 30 °C, links waschen.",
+                        ]
+                      : [
+                          "Designed in-studio — limited production runs.",
+                          "100% Premium Heavy Cotton.",
+                          "Oversized fit — consider sizing up.",
+                          "Machine wash at 30°C, wash inside out.",
+                        ],
+                  },
+                ].map((item, i) => (
+                  <InfoAccordion key={i} title={item.title} items={item.content} />
+                ))}
               </div>
             </motion.div>
           </div>
