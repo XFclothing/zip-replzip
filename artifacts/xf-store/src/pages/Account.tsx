@@ -192,7 +192,8 @@ export default function Account() {
   }
 
   async function confirmDisable2FA() {
-    if (disableCode.length !== 6) return;
+    const requiredLen = mfaMethod === "email" ? 8 : 6;
+    if (disableCode.length !== requiredLen) return;
     setMfaLoading(true);
     setMfaError(null);
     if (mfaMethod === "email") {
@@ -664,17 +665,17 @@ export default function Account() {
                       <input
                         type="text"
                         inputMode="numeric"
-                        maxLength={6}
+                        maxLength={mfaMethod === "email" ? 8 : 6}
                         value={disableCode}
                         onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, ""))}
-                        placeholder="000000"
+                        placeholder={mfaMethod === "email" ? "00000000" : "000000"}
                         autoFocus
                         className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-white/30 transition-colors mb-4"
                       />
                       {mfaError && <p className="text-red-400/80 text-xs mb-3">{mfaError}</p>}
                       <button
                         onClick={confirmDisable2FA}
-                        disabled={mfaLoading || disableCode.length !== 6}
+                        disabled={mfaLoading || disableCode.length !== (mfaMethod === "email" ? 8 : 6)}
                         className="w-full bg-red-500/80 text-white py-3.5 text-xs uppercase tracking-[0.4em] font-semibold hover:bg-red-500 transition-colors disabled:opacity-40"
                       >
                         {mfaLoading ? t.account.disabling : t.account.disable2FATitle}
