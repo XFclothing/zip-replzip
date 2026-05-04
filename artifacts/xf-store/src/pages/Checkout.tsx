@@ -149,6 +149,21 @@ export default function Checkout() {
     });
 
     if (data.order) {
+      const customerEmail = profile?.email || user!.email || "";
+      const customerName = profile?.name || "";
+      apiPost("/email/order", {
+        customerEmail,
+        customerName,
+        orderId: data.order.id,
+        total: finalTotal,
+        shippingAddress: finalAddress,
+        items: items.map((i) => ({
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity,
+          size: i.size,
+        })),
+      });
       clearCart();
       navigate("/checkout/success?method=pending");
     } else {
