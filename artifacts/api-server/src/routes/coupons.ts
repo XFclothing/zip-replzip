@@ -65,11 +65,20 @@ router.post("/orders/place", async (req, res): Promise<void> => {
       return;
     }
 
-    // Normalize shippingAddress — DB expects a JSON object
-    const normalizedAddress =
-      typeof shippingAddress === "string"
-        ? { street: shippingAddress, city: "", zip: "", country: "" }
-        : shippingAddress;
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      res.status(500).json({ error: "Supabase config missing" });
+      return;
+    }
+
+    const headers = {
+      "Content-Type": "application/json",
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      Prefer: "return=representation",
+    };
 
     // Increment coupon usage if a coupon was applied
     if (couponCode) {
@@ -79,20 +88,44 @@ router.post("/orders/place", async (req, res): Promise<void> => {
         .where(eq(couponsTable.code, couponCode.toUpperCase().trim()));
     }
 
-    const [order] = await db
-      .insert(ordersTable)
-      .values({
-        userId: userId || null,
-        customerName: customerName || "",
-        email: email || "",
-        shippingAddress: normalizedAddress,
-        items,
-        totalPrice,
+    // Insert order into Supabase orders table (plain text shipping_address)
+    const orderRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        user_id: userId || null,
+        total_price: totalPrice,
         status: "pending",
-      })
-      .returning();
+        shipping_address: typeof shippingAddress === "string" ? shippingAddress : JSON.stringify(shippingAddress),
+      }),
+    });
 
-    res.json({ order: { ...order, createdAt: order.createdAt.toISOString() } });
+    const orderData = await orderRes.json();
+    if (!orderRes.ok) {
+      console.error("Supabase order insert error:", orderData);
+      res.status(500).json({ error: orderData.message || "Failed to create order" });
+      return;
+    }
+
+    const order = Array.isArray(orderData) ? orderData[0] : orderData;
+
+    // Insert order items
+    const orderItems = items.map((item: any) => ({
+      order_id: order.id,
+      product_id: item.productId || null,
+      name: item.name,
+      price: item.price,
+      size: item.size,
+      quantity: item.quantity,
+    }));
+
+    await fetch(`${supabaseUrl}/rest/v1/order_items`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(orderItems),
+    });
+
+    res.json({ order });
   } catch (err: any) {
     console.error("Place order error:", err);
     res.status(500).json({ error: err.message || "Failed to place order" });
