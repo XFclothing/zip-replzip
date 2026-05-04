@@ -123,6 +123,30 @@ router.post("/email/ticket", async (req, res) => {
   }
 });
 
+router.post("/email/newsletter-confirm", async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400).json({ ok: false, error: "Email required" });
+    return;
+  }
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: email,
+      subject: "XF — You're on the list",
+      html: `<div style="background:#000;color:#fff;font-family:sans-serif;padding:48px 32px;max-width:480px;margin:0 auto;">
+  <h2 style="font-size:11px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:0 0 32px;">XF — Unseen Collection</h2>
+  <p style="font-size:15px;font-weight:700;color:#fff;margin:0 0 16px;letter-spacing:2px;text-transform:uppercase;">You're on the list.</p>
+  <p style="font-size:13px;color:rgba(255,255,255,0.6);margin:0 0 32px;line-height:1.8;">You'll be the first to know when the XF Unseen Collection drops.<br><br>Stay close.</p>
+  <p style="font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;margin:0;">XF by Xavier &amp; Fynn</p>
+</div>`,
+    });
+    res.json({ ok: true });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 router.post("/email/notify-subscribers", async (req, res) => {
   const { subject, message } = req.body;
   if (!subject || !message) {

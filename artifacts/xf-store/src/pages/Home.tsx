@@ -40,7 +40,13 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    await supabase.from("notify_emails").upsert({ email: email.toLowerCase().trim() }, { onConflict: "email" });
+    const cleanEmail = email.toLowerCase().trim();
+    await supabase.from("notify_emails").upsert({ email: cleanEmail }, { onConflict: "email" });
+    fetch("/api/email/newsletter-confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: cleanEmail }),
+    }).catch(() => {});
     setSubmitted(true);
   };
 
