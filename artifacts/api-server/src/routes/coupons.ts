@@ -65,6 +65,12 @@ router.post("/orders/place", async (req, res): Promise<void> => {
       return;
     }
 
+    // Normalize shippingAddress — DB expects a JSON object
+    const normalizedAddress =
+      typeof shippingAddress === "string"
+        ? { street: shippingAddress, city: "", zip: "", country: "" }
+        : shippingAddress;
+
     // Increment coupon usage if a coupon was applied
     if (couponCode) {
       await db
@@ -79,7 +85,7 @@ router.post("/orders/place", async (req, res): Promise<void> => {
         userId: userId || null,
         customerName: customerName || "",
         email: email || "",
-        shippingAddress,
+        shippingAddress: normalizedAddress,
         items,
         totalPrice,
         status: "pending",
